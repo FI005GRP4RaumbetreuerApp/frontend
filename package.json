@@ -24,7 +24,7 @@
     "vite": "^3.2.3"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port=3000",
     "build": "vite build",
     "preview": "vite preview"
   },
