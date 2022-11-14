@@ -1,6 +1,10 @@
 # OSP
 OSP der Gruppe 4 Raumbetreuer App
-
+### Frontend zum Laufen bringen
+* "start": "react-scripts start",
+* "build": "react-scripts build",
+* "test": "react-scripts test",
+* "eject": "react-scripts eject",
 
 ## Einleitung in das Projekt
 Mit dem Projekt Raumbetreuer, soll von der Gruppe 4 für Frau Hermanns das Problem am Georg-Simon-Ohm Berufskolleg angegangen werden, dass das Aufnehmen und Protokollieren von Defekten und der anschließende Informationsaustausch nur umständlich und unter Schwierigkeiten durch die Lehrer passiert. Es soll eine Lösung erarbeitet werden, welche es Lehrern ermöglicht, Defekte schneller aufzunehmen und andere betroffene Lehrer schneller über den Defekt in Kenntnis zu setzen. Somit wird auch erreicht, dass Defekte schneller bearbeitet und behoben werden können. 
