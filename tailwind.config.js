@@ -3,6 +3,9 @@ module.exports = {
   content: ['./src/**/*.{html,js,ts,tsx}'],
   theme: {
     extend: {
+      screens: {
+        xs: '480px',
+      },
       spacing: {
         128: '32rem',
       },
