@@ -4,10 +4,10 @@ OSP der Gruppe 4 Raumbetreuer App
 
 ## Frontend mit Docker starten
 
-Clean start in one command: docker-compose down && docker-compose build --no-cache && docker-compose up
-Stop container: docker-compose down
-Start container: docker-compose up
-Delete container: docker-compose rm -f
+- Clean start in one command: docker-compose down && docker-compose build --no-cache && docker-compose up
+- Stop container: docker-compose down
+- Start container: docker-compose up
+- Delete container: docker-compose rm -f
 
 ### Frontend scripts
 
