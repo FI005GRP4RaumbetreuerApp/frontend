@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom/client'
 import './index.css'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { LoginPage } from './pages/LoginPage'
-import { Landingpage } from './pages/LoginPage/Landingpage'
+import { Landingpage } from './pages/Landingpage/Landingpage'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
