@@ -1,13 +1,23 @@
 import { FC, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import useLogin from '../../api/useLogin'
+import { LoginResponse } from '../../types'
 
 export const LoginPage: FC = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  const history = useHistory()
+  const login = useLogin()
 
-  const authorizeLogin = (email: string, password: string): void => {
-    if (email && password) history.push('/overview')
+  const authorizeLogin = async (
+    email: string,
+    password: string
+  ): Promise<void> => {
+    try {
+      const loginResponse: LoginResponse = await login({ email, password })
+
+      console.log(loginResponse)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   return (
@@ -48,10 +58,8 @@ export const LoginPage: FC = () => {
           </button>
         </div>
       </div>
-      <div className="flex h-12 bg-black self-bottom text-xs justify-center">
-        <span className="text-white mt-4">
-          ©Georg-Simon-Ohm Berufskolleg 2022
-        </span>
+      <div className="flex flex-col h-12 bg-black self-bottom text-xs justify-center items-center">
+        <span className="text-white">©Georg-Simon-Ohm Berufskolleg 2022</span>
       </div>
     </div>
   )

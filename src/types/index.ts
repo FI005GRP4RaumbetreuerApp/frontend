@@ -1,3 +1,4 @@
 import { User } from './user'
+import { LoginResponse } from './loginResponse'
 
-export type { User }
+export type { User, LoginResponse }
