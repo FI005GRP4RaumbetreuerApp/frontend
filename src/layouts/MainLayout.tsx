@@ -25,7 +25,7 @@ export const MainLayout: FC<Props> = (props: Props) => {
         </div>
       </div>
       <div className="w-full h-full bg-[#d9d9d9] justify-center items-center">
-        <div className="flex flex-col h-96 w-full md:w-2/3 mx-auto py-10 rounded-3xl items-center gap-8">
+        <div className="flex flex-col h-96 w-full md:w-2/3 mx-auto py-10 rounded-3xl gap-8">
           {props.children}
         </div>
       </div>
