@@ -6,10 +6,25 @@ interface HeaderProps {
 
 const Header: FC<HeaderProps> = ({ showHeaderButtons }) => {
   return (
-    <div className="flex flex-col bg-primary h-32 w-full justify-center items-center">
-      <span className=" text-white   sm:text-4xl xs:text-3xl text-2xl">
-        Georg-Simon-Ohm-Berufskolleg
-      </span>
+    <div className="flex flex-row bg-primary justify-center">
+      {showHeaderButtons == false && (
+        <span className="m-6 text-white sm:text-4xl xs:text-xl text-2xl">
+          Georg-Simon-Ohm-Berufskolleg
+        </span>
+      )}
+      {showHeaderButtons == true && (
+        <div className="flex flex-row bg-primary m-6 w-full justify-around">
+          <span className="flex text-white text-4xl">Max Mustermann</span>
+          <div className="flex gap-6">
+            <button className="bg-secondary w-24 h-12 rounded-3xl text-white text-xl">
+              Raum
+            </button>
+            <button className="bg-secondary w-32 h-12 rounded-3xl text-white text-xl">
+              Ausloggen
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
