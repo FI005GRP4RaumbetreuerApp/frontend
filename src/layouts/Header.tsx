@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import Dropdown from '../components/Dropdown'
 
 interface HeaderProps {
   showHeaderButtons: boolean
@@ -16,9 +17,7 @@ const Header: FC<HeaderProps> = ({ showHeaderButtons }) => {
         <div className="flex flex-row bg-primary m-6 w-full justify-around">
           <span className="flex text-white text-4xl">Max Mustermann</span>
           <div className="flex gap-6">
-            <button className="bg-secondary w-24 h-12 rounded-3xl text-white text-xl">
-              Raum
-            </button>
+            <Dropdown />
             <button className="bg-secondary w-32 h-12 rounded-3xl text-white text-xl">
               Ausloggen
             </button>
