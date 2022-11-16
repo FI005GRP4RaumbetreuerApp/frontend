@@ -1,9 +1,9 @@
 import { FC } from 'react'
-import { MainLayout } from '../../layouts/MainLayout'
+import PageLayout from '../../layouts'
 
 export const Landingpage: FC = () => {
   return (
-    <MainLayout topButtons>
+    <PageLayout showHeaderButtons={true}>
       <div className="px-16 flex flex-col w-full h-full bg-backgroundGray justify-center items-center">
         <div className="overflow-y-scroll h-128 px-8 w-full bg-white rounded-3xl">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(() => (
@@ -17,6 +17,6 @@ export const Landingpage: FC = () => {
           ))}
         </div>
       </div>
-    </MainLayout>
+    </PageLayout>
   )
 }
