@@ -15,7 +15,15 @@ const useLogin = (): (({
       email,
       password,
     }
-    const useLoginResponse = await axios.post('/api/v1/login', requestBody)
+    const useLoginResponse = await axios.post(
+      'http://144.76.118.243:8080/api/v1/auth/login',
+      requestBody,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
 
     return useLoginResponse.data
   }

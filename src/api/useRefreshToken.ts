@@ -17,9 +17,12 @@ const useRefreshToken = (): (({
       accessToken,
       refreshToken,
     }
-    const useLoginResponse = await axios.post('/api/v1/login', requestBody)
+    const useRefreshResponse = await axios.post(
+      '144.76.118.243:8080/api/v1/auth/refresh',
+      requestBody
+    )
 
-    return useLoginResponse.data
+    return useRefreshResponse.data
   }
 }
 
