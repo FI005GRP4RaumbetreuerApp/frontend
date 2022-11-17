@@ -1,14 +1,16 @@
 import { FC } from 'react'
 import { useCookies } from 'react-cookie'
-import { useGetReports } from '../../api'
+import { useGetReports, useGetUser } from '../../api'
 import PageLayout from '../../layouts'
 
 export const Landingpage: FC = () => {
   const [cookies] = useCookies(['access_token'])
 
   const getReports = useGetReports()
+  const getUser = useGetUser()
 
   console.log(getReports(cookies.access_token))
+  console.log(getUser())
 
   return (
     <PageLayout showHeaderButtons={true}>
