@@ -1,3 +1,4 @@
+import { report } from 'process'
 import React, { useEffect } from 'react'
 import { FC } from 'react'
 import { useCookies } from 'react-cookie'
@@ -8,9 +9,10 @@ import {
   useGetSelfMadeReports,
   useGetUser,
 } from '../../api'
+import useGetOwnRoom from '../../api/useGetOwnRoom'
 import AppContext from '../../AppContext'
 import PageLayout from '../../layouts'
-import { Report, User } from '../../types'
+import { Report, Room, User } from '../../types'
 import { ReportingForm } from './ReportingForm'
 
 export const Landingpage: FC = () => {
@@ -39,10 +41,20 @@ export const Landingpage: FC = () => {
     )
   }, [])
 
+  const getOwnRoom = useGetOwnRoom()
+
+  const roomReports = []
+
   React.useEffect(() => {
-    getRoomSupervisorReports({ accessToken: cookies.access_token }).then(
-      (report: Report[]) => setRaumBetreuerMeldungen(report)
+    getOwnRoom({ accessToken: cookies.access_token }).then((rooms: Room[]) =>
+      rooms.map((room) =>
+        getRoomSupervisorReports({
+          accessToken: cookies.access_token,
+          id: room.id,
+        }).then((report: Report[]) => roomReports.push(report))
+      )
     )
+    setRaumBetreuerMeldungen(roomReports)
   }, [])
 
   React.useEffect(() => {
@@ -50,8 +62,6 @@ export const Landingpage: FC = () => {
       (report: Report[]) => setAlleMeldungen(report)
     )
   }, [])
-
-  console.log('nigger', certainRoomIdReports)
 
   return (
     <PageLayout showHeaderButtons={true}>
@@ -91,7 +101,7 @@ export const Landingpage: FC = () => {
           <div className="font-bold p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
             <div className="w-full">Meldungen für den Raumbetreuer</div>
           </div>
-          {raumBetreuerMeldungen.map((report) => (
+          {raumBetreuerMeldungen.flat(Infinity).map((report) => (
             <div className="hover:bg-gray-300 p-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
               <div className="w-full">{report.description}</div>
               <div className="justify-between w-2/5 flex flex-row">
