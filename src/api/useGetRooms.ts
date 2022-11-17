@@ -1,16 +1,19 @@
 import axios from 'axios'
-import { useCookies } from 'react-cookie'
 import { Room } from '../types'
 
-const useGetRooms = (): (() => Promise<Room[]>) => {
-  return async (): Promise<Room[]> => {
-    const [cookies] = useCookies(['access_token'])
+interface useGetRoomsProps {
+  accessToken: string
+}
 
+const useGetRooms = (): (({
+  accessToken,
+}: useGetRoomsProps) => Promise<Room[]>) => {
+  return async ({ accessToken }: useGetRoomsProps): Promise<Room[]> => {
     const useGetRoomResponse = await axios.get(
       'http://144.76.118.243:8080/api/v1/raum/get/all',
       {
         headers: {
-          authorization: 'Bearer ' + cookies.access_token,
+          Authorization: 'Bearer ' + accessToken,
         },
       }
     )

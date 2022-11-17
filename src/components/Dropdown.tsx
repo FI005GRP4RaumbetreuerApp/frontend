@@ -1,23 +1,24 @@
 import * as React from 'react'
+import { useCookies } from 'react-cookie'
 import { useGetRooms } from '../api'
 import { Room } from '../types'
 
 const App = () => {
+  const [cookies] = useCookies(['access_token'])
+
+  const [rooms, setRooms] = React.useState<Room[]>([])
+
   const [open, setOpen] = React.useState(false)
 
   const [room, setRoom] = React.useState('-')
 
   const getRooms = useGetRooms()
 
-  function handleRooms(): Room[] {
-    let rooms: Room[] = []
-
-    getRooms().then((roomsResponse: Room[]) => {
-      rooms = roomsResponse
-    })
-
-    return rooms
-  }
+  React.useEffect(() => {
+    getRooms({ accessToken: cookies.access_token }).then((rooms: Room[]) =>
+      setRooms(rooms)
+    )
+  }, [])
 
   const handleOpen = () => {
     setOpen(!open)
@@ -25,8 +26,11 @@ const App = () => {
 
   const handleRoomSelection = (key) => {
     setRoom(`${key}`)
+    localStorage.setItem('selected-room', key)
     setOpen(!open)
   }
+
+  console.log(rooms)
 
   return (
     <div className="text-white">
@@ -70,12 +74,12 @@ const App = () => {
       </button>
       {open ? (
         <ul className="bg-secondary overflow-auto w-24 h-24 absolute rounded-xl">
-          {handleRooms().map((key) => (
+          {rooms.map((item: Room) => (
             <button
-              onClick={() => handleRoomSelection(key.id)}
+              onClick={() => handleRoomSelection(item.id)}
               className="hover:bg-primary rounded-xl w-full"
             >
-              {key.id}
+              {item.id}
             </button>
           ))}
         </ul>

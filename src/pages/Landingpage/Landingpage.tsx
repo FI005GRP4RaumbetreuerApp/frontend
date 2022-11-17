@@ -1,16 +1,54 @@
+import React from 'react'
 import { FC } from 'react'
 import { useCookies } from 'react-cookie'
-import { useGetReports, useGetUser } from '../../api'
+import {
+  useGetAllReports,
+  useGetRoomReports,
+  useGetRoomSupervisorReports,
+  useGetSelfMadeReports,
+  useGetUser,
+} from '../../api'
 import PageLayout from '../../layouts'
+import { Report } from '../../types'
 
 export const Landingpage: FC = () => {
   const [cookies] = useCookies(['access_token'])
 
-  const getReports = useGetReports()
-  const getUser = useGetUser()
+  const [eigeneMeldungen, setEigeneMeldungen] = React.useState<Report[]>([])
+  const [raumMeldungen, setRaumMeldungen] = React.useState<Report[]>([])
+  const [raumBetreuerMeldungen, setRaumBetreuerMeldungen] = React.useState<
+    Report[]
+  >([])
+  const [raumAlleMeldungen, setAlleMeldungen] = React.useState<Report[]>([])
 
-  console.log(getReports(cookies.access_token))
-  console.log(getUser())
+  const getSelfMadeReports = useGetSelfMadeReports()
+  const getRoomReports = useGetRoomReports()
+  const getRoomSupervisorReports = useGetRoomSupervisorReports()
+  const getAllReportsReports = useGetAllReports()
+
+  React.useEffect(() => {
+    getSelfMadeReports({ accessToken: cookies.access_token }).then(
+      (report: Report[]) => setEigeneMeldungen(report)
+    )
+  }, [])
+
+  React.useEffect(() => {
+    getRoomReports({ accessToken: cookies.access_token }).then(
+      (report: Report[]) => setEigeneMeldungen(report)
+    )
+  }, [])
+
+  React.useEffect(() => {
+    getRoomSupervisorReports({ accessToken: cookies.access_token }).then(
+      (report: Report[]) => setEigeneMeldungen(report)
+    )
+  }, [])
+
+  React.useEffect(() => {
+    getAllReportsReports({ accessToken: cookies.access_token }).then(
+      (report: Report[]) => setEigeneMeldungen(report)
+    )
+  }, [])
 
   return (
     <PageLayout showHeaderButtons={true}>
@@ -18,6 +56,20 @@ export const Landingpage: FC = () => {
         <div className="overflow-y-scroll my-4 h-128 px-8 w-full bg-white rounded-3xl">
           <div className="font-bold p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
             <div className="w-full">Eigene Meldungen</div>
+          </div>
+          {eigeneMeldungen.map(() => (
+            <div className="hover:bg-gray-300 p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
+              <div className="w-full">Witchy Woman</div>
+              <div className="justify-between w-2/5 flex flex-row">
+                <div>The Eagles</div>
+                <div>1972</div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="overflow-y-scroll my-4 h-128 px-8 w-full bg-white rounded-3xl">
+          <div className="font-bold p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
+            <div className="w-full">Ausgewählter Raum</div>
           </div>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(() => (
             <div className="hover:bg-gray-300 p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
