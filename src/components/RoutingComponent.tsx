@@ -11,9 +11,10 @@ export const RoutingComponent: FC = () => {
 
   useEffect(() => {
     if (
+      cookies.access_token &&
       Math.floor(Date.now() / 1000) -
         (jwt_decode(cookies.access_token) as JwtPayload).iat <
-      900
+        900
     ) {
       setRedirectIsAllowed(true)
     }
