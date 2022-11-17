@@ -9,7 +9,7 @@ import {
   useGetUser,
 } from '../../api'
 import PageLayout from '../../layouts'
-import { Report } from '../../types'
+import { Report, User } from '../../types'
 
 export const Landingpage: FC = () => {
   const [cookies] = useCookies(['access_token'])
@@ -21,10 +21,22 @@ export const Landingpage: FC = () => {
   >([])
   const [raumAlleMeldungen, setAlleMeldungen] = React.useState<Report[]>([])
 
+  const [user, setUser] = React.useState<User>()
+
+  const [selectedRoom, setSelectedRoom] = React.useState('')
+
   const getSelfMadeReports = useGetSelfMadeReports()
   const getRoomReports = useGetRoomReports()
+
   const getRoomSupervisorReports = useGetRoomSupervisorReports()
   const getAllReportsReports = useGetAllReports()
+  const getUser = useGetUser()
+
+  React.useEffect(() => {
+    getUser({ accessToken: cookies.access_token }).then((user: User) =>
+      setUser(user)
+    )
+  }, [])
 
   React.useEffect(() => {
     getSelfMadeReports({ accessToken: cookies.access_token }).then(
@@ -32,21 +44,32 @@ export const Landingpage: FC = () => {
     )
   }, [])
 
+  // React.useEffect(() => {
+  //   console.log('HALLK')
+  //   getRoomReports({
+  //     accessToken: cookies.access_token,
+  //     id: localStorage.getItem('selected-room'),
+  //   }).then((report: Report[]) => setRaumMeldungen(report))
+  // }, [])
+
   React.useEffect(() => {
-    getRoomReports({ accessToken: cookies.access_token }).then(
-      (report: Report[]) => setEigeneMeldungen(report)
-    )
+    window.addEventListener('storage', () => {
+      getRoomReports({
+        accessToken: cookies.access_token,
+        id: localStorage.getItem('selected-room'),
+      }).then((report: Report[]) => setRaumMeldungen(report))
+    })
   }, [])
 
   React.useEffect(() => {
     getRoomSupervisorReports({ accessToken: cookies.access_token }).then(
-      (report: Report[]) => setEigeneMeldungen(report)
+      (report: Report[]) => setRaumBetreuerMeldungen(report)
     )
   }, [])
 
   React.useEffect(() => {
     getAllReportsReports({ accessToken: cookies.access_token }).then(
-      (report: Report[]) => setEigeneMeldungen(report)
+      (report: Report[]) => setAlleMeldungen(report)
     )
   }, [])
 
@@ -57,12 +80,12 @@ export const Landingpage: FC = () => {
           <div className="font-bold p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
             <div className="w-full">Eigene Meldungen</div>
           </div>
-          {eigeneMeldungen.map(() => (
-            <div className="hover:bg-gray-300 p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
-              <div className="w-full">Witchy Woman</div>
+          {eigeneMeldungen.map((report) => (
+            <div className="hover:bg-gray-300 p-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
+              <div className="w-full">{report.description}</div>
               <div className="justify-between w-2/5 flex flex-row">
-                <div>The Eagles</div>
-                <div>1972</div>
+                <div>{report.room}</div>
+                <div>{report.status}</div>
               </div>
             </div>
           ))}
@@ -71,12 +94,12 @@ export const Landingpage: FC = () => {
           <div className="font-bold p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
             <div className="w-full">Ausgewählter Raum</div>
           </div>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(() => (
-            <div className="hover:bg-gray-300 p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
-              <div className="w-full">Witchy Woman</div>
+          {raumMeldungen.map((report) => (
+            <div className="hover:bg-gray-300 p-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
+              <div className="w-full">{report.description}</div>
               <div className="justify-between w-2/5 flex flex-row">
-                <div>The Eagles</div>
-                <div>1972</div>
+                <div>{report.room}</div>
+                <div>{report.status}</div>
               </div>
             </div>
           ))}
@@ -85,12 +108,12 @@ export const Landingpage: FC = () => {
           <div className="font-bold p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
             <div className="w-full">Meldungen für den Raumbetreuer</div>
           </div>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(() => (
-            <div className="hover:bg-gray-300 p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
-              <div className="w-full">Witchy Woman</div>
+          {raumBetreuerMeldungen.map((report) => (
+            <div className="hover:bg-gray-300 p-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
+              <div className="w-full">{report.description}</div>
               <div className="justify-between w-2/5 flex flex-row">
-                <div>The Eagles</div>
-                <div>1972</div>
+                <div>{report.room}</div>
+                <div>{report.status}</div>
               </div>
             </div>
           ))}
@@ -99,12 +122,12 @@ export const Landingpage: FC = () => {
           <div className="font-bold p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
             <div className="w-full">Alle Meldungen</div>
           </div>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(() => (
-            <div className="hover:bg-gray-300 p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
-              <div className="w-full">Witchy Woman</div>
+          {raumAlleMeldungen.map((report) => (
+            <div className="hover:bg-gray-300 p-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
+              <div className="w-full">{report.description}</div>
               <div className="justify-between w-2/5 flex flex-row">
-                <div>The Eagles</div>
-                <div>1972</div>
+                <div>{report.room}</div>
+                <div>{report.status}</div>
               </div>
             </div>
           ))}
