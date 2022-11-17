@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Dialog, Listbox  } from '@headlessui/react'
 import { useCookies } from "react-cookie";
 import { useHistory } from 'react-router-dom'
@@ -6,7 +6,7 @@ import useAddReport from "../../api/useAddReport";
 import { AddReport } from "../../types/AddReport";
 import Input from '../../components/Input'
 import { useGetRooms } from "../../api";
-import { Room } from "../../types";
+import { Report, Room } from "../../types";
 
 interface Props{
   selectRoom: string
@@ -29,18 +29,23 @@ export const ReportingForm: FC<Props> = ({selectRoom}) => {
   const history = useHistory();
   const AddReportForm = useAddReport();
   const [meldungsTyp, setMeldungsTyp] = useState<string>('')
-  const [raumId, setraumId] = useState<string>(selectRoom)
+  const [raumId, setraumId] = useState('')
   const [geraeteTypId, setGeraeteTypId] = useState<string>('')
   const [description, setDescription] = useState<string>('')
   const [geraeteId, setGeraeteId] = useState<string>('')
   const [status, setStatus] = useState<string>('')
 
   const [errorMessage, setErrorMessage] = useState<string>('')
-  const [rooms, setRooms] = useState()
+
+  const [rooms, setRooms] = useState<Room[]>([])
+
   const getRooms = useGetRooms()
-  getRooms({accessToken: cookies.access_token}).then((res: Room[]) =>{
-    setRooms(res)
-  });
+
+    getRooms({ accessToken: cookies.access_token }).then(
+      (res: Room[]) => setRooms(res)
+    )
+
+
   const addReportForm = async (
     accessToken: string,
     meldungs_typ: string,
@@ -110,24 +115,28 @@ export const ReportingForm: FC<Props> = ({selectRoom}) => {
                   placeHolder="Geräte ID"
                   onChange={(value: string) => setGeraeteId(value)}
                 />
-                <Input
-                  type="text"
-                  placeHolder="Raumname"
-                  onChange={(value: string) => setraumId(value)}
-                />
+
                 <div className="relative">
-                  <Listbox value={status} onChange={setStatus}>
+                  <Listbox value={raumId} onChange={setraumId}>
                     <Listbox.Button
-                      className="text-left bg-backgroundGray px-5 py-2 rounded-2xl w-96 placeholder-neutral-600 text-neutral-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-                    >{status ? meldungsStatus.find(s => s.key === status).label : 'Auswahl'}</Listbox.Button>
-                    <Listbox.Options className="w-full absolute top-10 left-0 z-50 bg-white p-3 rounded-xl shadow flex flex-col gap-2 divide-y">
-                      {meldungsStatus.map((status) => (
+                      className="flex justify-between items-center text-left bg-backgroundGray px-5 py-2 rounded-2xl w-96 placeholder-neutral-600 text-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                    >
+                      <span>{raumId ? rooms.find(s => s.id === raumId) : 'Raum auswählen'}</span>
+                      <span className="">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                           stroke="currentColor" className="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+                      </svg>
+                    </span>
+                    </Listbox.Button>
+                    <Listbox.Options className="w-full absolute top-10 left-0 z-50 bg-white p-3 rounded-xl h-44 overflow-y-auto shadow flex flex-col gap-2 divide-y">
+                      {rooms.map((room) => (
                         <Listbox.Option
-                          key={status.id}
-                          value={status.key}
+                          key={room.id}
+                          value={room.id}
                           className="cursor-pointer hover:bg-secondary px-2"
                         >
-                          {status.label}
+                          {room.id}
                         </Listbox.Option>
                       ))}
                     </Listbox.Options>
@@ -136,8 +145,16 @@ export const ReportingForm: FC<Props> = ({selectRoom}) => {
                 <div className="relative">
                   <Listbox value={status} onChange={setStatus}>
                     <Listbox.Button
-                      className="text-left bg-backgroundGray px-5 py-2 rounded-2xl w-96 placeholder-neutral-600 text-neutral-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-                    >{status ? meldungsStatus.find(s => s.key === status).label : 'Auswahl'}</Listbox.Button>
+                      className="flex justify-between items-center text-left bg-backgroundGray px-5 py-2 rounded-2xl w-96 placeholder-neutral-600 text-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                    >
+                      <span>{status ? meldungsStatus.find(s => s.key === status).label : 'Meldungsstatus auswählen'}</span>
+                      <span className="">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                           stroke="currentColor" className="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+                      </svg>
+                    </span>
+                    </Listbox.Button>
                     <Listbox.Options className="w-full absolute top-10 left-0 z-50 bg-white p-3 rounded-xl shadow flex flex-col gap-2 divide-y">
                       {meldungsStatus.map((status) => (
                         <Listbox.Option
@@ -154,8 +171,16 @@ export const ReportingForm: FC<Props> = ({selectRoom}) => {
                 <div className="relative">
                   <Listbox value={meldungsTyp} onChange={setMeldungsTyp}>
                     <Listbox.Button
-                      className="text-left bg-backgroundGray px-5 py-2 rounded-2xl w-96 placeholder-neutral-600 text-neutral-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-                    >{meldungsTyp ? reportTypes.find(s => s.key === meldungsTyp).label : 'Auswahl'}</Listbox.Button>
+                      className="flex justify-between items-center text-left bg-backgroundGray px-5 py-2 rounded-2xl w-96 placeholder-neutral-600 text-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                    >
+                      <span>{meldungsTyp ? reportTypes.find(s => s.key === meldungsTyp).label : 'Meldungstype auswählen'}</span>
+                    <span className="">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                           stroke="currentColor" className="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+                      </svg>
+                    </span>
+                    </Listbox.Button>
                     <Listbox.Options className="w-full absolute top-10 left-0 z-50 bg-white p-3 rounded-xl shadow flex flex-col gap-2 divide-y">
                       {reportTypes.map((personType) => (
                         <Listbox.Option
@@ -178,17 +203,18 @@ export const ReportingForm: FC<Props> = ({selectRoom}) => {
               </div>
               <div className="flex justify-center items-center bg-primary h-16 w-full gap-4 rounded-b-2xl">
                 <button
-                  className="w-32 rounded-2xl py-1 px-2 bg-secondary text-slate-200 hover:outline hover:outline-secondary hover:bg-primary"
-                  onClick={() => addReportForm(cookies.access_token,meldungsTyp,raumId,geraeteTypId,description,geraeteId,status)}
-                >
-                  Absenden
-                </button>
-                <button
                   className="w-32 rounded-2xl py-1 px-2 bg-gray-400 text-gray-700 hover:text-slate-200 hover:outline hover:outline-secondary hover:bg-primary"
                   onClick={() => setOpenDialogForm(false)}
                 >
                   Abbrechen
                 </button>
+                <button
+                  className="w-32 rounded-2xl py-1 px-2 bg-secondary text-slate-200 hover:outline hover:outline-secondary hover:bg-primary"
+                  onClick={() => addReportForm(cookies.access_token,meldungsTyp,raumId,geraeteTypId,description,geraeteId,status)}
+                >
+                  Absenden
+                </button>
+
               </div>
             </Dialog.Panel>
           </div>
