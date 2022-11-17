@@ -5,7 +5,7 @@ interface HeaderProps {
   showHeaderButtons: boolean
 }
 
-const Header: FC<HeaderProps> = ({ showHeaderButtons }) => {
+const Header: FC<HeaderProps> = ({ showHeaderButtons = false }) => {
   return (
     <div className="flex flex-row bg-primary justify-center">
       {showHeaderButtons == false && (

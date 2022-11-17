@@ -1,21 +1,39 @@
 import { FC, useState } from 'react'
-import { LoginForm } from '../../components'
+import {
+  LoginForm,
+  PasswordResetInitiationForm,
+  PasswordResetSuccessfullDialog,
+} from '../../components'
 import PasswordResetForm from '../../components/PasswordResetForm'
 import PageLayout from '../../layouts'
+import { LoginPageComponents } from '../../types'
 
-export const LoginPage: FC = () => {
-  const [emailIsInvalid, setEmailIsInvalid] = useState<boolean>(false)
-  const [passwortReseting, setPasswortReseting] = useState<boolean>(false)
+interface LoginPageProps {
+  setRedirectIsAllowed: (isAllowed: boolean) => void
+}
+
+export const LoginPage: FC<LoginPageProps> = ({ setRedirectIsAllowed }) => {
+  const [currentComponentIndex, setCurrentComponentIndex] =
+    useState<LoginPageComponents>('LoginForm')
 
   return (
     <PageLayout showHeaderButtons={false}>
-      {passwortReseting ? (
-        <PasswordResetForm setPasswortReseting={setPasswortReseting} />
+      {currentComponentIndex === 'PasswordResetInitiationForm' ? (
+        <PasswordResetInitiationForm
+          setCurrentComponentIndex={setCurrentComponentIndex}
+        />
+      ) : currentComponentIndex === 'PasswordResetForm' ? (
+        <PasswordResetForm
+          setCurrentComponentIndex={setCurrentComponentIndex}
+        />
+      ) : currentComponentIndex === 'ResetSuccessfullDialog' ? (
+        <PasswordResetSuccessfullDialog
+          setCurrentComponentIndex={setCurrentComponentIndex}
+        />
       ) : (
         <LoginForm
-          emailIsInvalid={emailIsInvalid}
-          setEmailIsInvalid={setEmailIsInvalid}
-          setPasswordReseting={setPasswortReseting}
+          setCurrentComponentIndex={setCurrentComponentIndex}
+          setRedirectIsAllowed={setRedirectIsAllowed}
         />
       )}
     </PageLayout>

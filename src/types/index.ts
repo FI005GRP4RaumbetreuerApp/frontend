@@ -1,4 +1,6 @@
 import { User } from './user'
-import { LoginResponse } from './loginResponse'
+import { AuthResponse } from './authResponse'
+import { Report } from './report'
+import { LoginPageComponents } from './loginPageComponents'
 
-export type { User, LoginResponse }
+export type { User, AuthResponse, Report, LoginPageComponents }

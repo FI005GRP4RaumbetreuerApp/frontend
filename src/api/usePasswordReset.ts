@@ -1,24 +1,32 @@
 import axios from 'axios'
 
 type usePasswordResetProps = {
-  email: string
+  password: string
+  passwordConfirmation: string
+  authenticationCode: string
 }
 
 const usePasswordReset = (): (({
-  email,
-}: usePasswordResetProps) => Promise<{ resetSuccessful: boolean }>) => {
+  password,
+  passwordConfirmation,
+  authenticationCode,
+}: usePasswordResetProps) => Promise<boolean>) => {
   return async ({
-    email,
-  }: usePasswordResetProps): Promise<{ resetSuccessful: boolean }> => {
+    password,
+    passwordConfirmation,
+    authenticationCode,
+  }: usePasswordResetProps): Promise<boolean> => {
     const requestBody = {
-      email,
+      new_password: password,
+      new_password_conformation: passwordConfirmation,
+      reset_code: authenticationCode,
     }
-    const usePasswordReset = await axios.post(
-      '144.76.118.243:8080/api/v1/auth/passwordReset',
+    const passwordResetResponse = await axios.post(
+      'http://144.76.118.243:8080/api/v1/auth/resetpassword',
       requestBody
     )
 
-    return usePasswordReset.data
+    return passwordResetResponse.status === 200 ? true : false
   }
 }
 

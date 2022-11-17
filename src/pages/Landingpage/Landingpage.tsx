@@ -1,7 +1,12 @@
 import { FC } from 'react'
+import { useCookies } from 'react-cookie'
 import PageLayout from '../../layouts'
 
 export const Landingpage: FC = () => {
+  const [cookies] = useCookies(['access_token', 'refresh_token'])
+
+  console.log(cookies)
+
   return (
     <PageLayout showHeaderButtons={true}>
       <div className="px-64 gap-4 flex flex-col w-full h-full bg-backgroundGray justify-center items-center">

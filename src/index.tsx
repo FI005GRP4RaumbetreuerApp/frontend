@@ -1,22 +1,7 @@
 import ReactDOM from 'react-dom/client'
+import { useState } from 'react'
 import './index.css'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { LoginPage } from './pages/LoginPage'
-import { Landingpage } from './pages/Landingpage/Landingpage'
+import { RoutingComponent } from './components/RoutingComponent'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
-root.render(
-  <Router>
-    <Switch>
-      <Route path="/" exact>
-        <LoginPage />
-      </Route>
-      <Route path="/overview/" exact>
-        <Landingpage />
-      </Route>
-      <Route path="/">
-        <div>404</div>
-      </Route>
-    </Switch>
-  </Router>
-)
+root.render(<RoutingComponent />)

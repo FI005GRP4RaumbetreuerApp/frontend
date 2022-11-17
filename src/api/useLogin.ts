@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { LoginResponse } from '../types/loginResponse'
+import { AuthResponse } from '../types'
 
 type useLoginProps = {
   email: string
@@ -9,8 +9,8 @@ type useLoginProps = {
 const useLogin = (): (({
   email,
   password,
-}: useLoginProps) => Promise<LoginResponse>) => {
-  return async ({ email, password }: useLoginProps): Promise<LoginResponse> => {
+}: useLoginProps) => Promise<AuthResponse>) => {
+  return async ({ email, password }: useLoginProps): Promise<AuthResponse> => {
     const requestBody = {
       email,
       password,
@@ -24,6 +24,8 @@ const useLogin = (): (({
         },
       }
     )
+
+    console.log(useLoginResponse)
 
     return useLoginResponse.data
   }
