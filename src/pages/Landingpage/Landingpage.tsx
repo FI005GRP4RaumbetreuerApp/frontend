@@ -1,10 +1,8 @@
-import { report } from 'process'
 import React, { useEffect } from 'react'
 import { FC } from 'react'
 import { useCookies } from 'react-cookie'
 import {
   useGetAllReports,
-  useGetRoomReports,
   useGetRoomSupervisorReports,
   useGetSelfMadeReports,
   useGetUser,
@@ -19,7 +17,6 @@ export const Landingpage: FC = () => {
   const [cookies] = useCookies(['access_token'])
 
   const [eigeneMeldungen, setEigeneMeldungen] = React.useState<Report[]>([])
-  const [raumMeldungen, setRaumMeldungen] = React.useState<Report[]>([])
   const [raumBetreuerMeldungen, setRaumBetreuerMeldungen] = React.useState<
     Report[][]
   >([])
