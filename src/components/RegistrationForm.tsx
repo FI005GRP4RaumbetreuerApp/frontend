@@ -1,5 +1,5 @@
 import { FC, useState } from 'react'
-import { AuthResponse, LoginPageComponents } from '../types'
+import { LoginPageComponents } from '../types'
 import Input from './Input'
 import { useRegister } from '../api'
 import * as EmailValidator from 'email-validator'
