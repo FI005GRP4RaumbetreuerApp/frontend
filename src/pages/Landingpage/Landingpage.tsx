@@ -21,7 +21,7 @@ export const Landingpage: FC = () => {
   const [eigeneMeldungen, setEigeneMeldungen] = React.useState<Report[]>([])
   const [raumMeldungen, setRaumMeldungen] = React.useState<Report[]>([])
   const [raumBetreuerMeldungen, setRaumBetreuerMeldungen] = React.useState<
-    Report[]
+    Report[][]
   >([])
   const [raumAlleMeldungen, setAlleMeldungen] = React.useState<Report[]>([])
 
@@ -48,28 +48,28 @@ export const Landingpage: FC = () => {
 
   const getOwnRoom = useGetOwnRoom()
 
-  const roomReports = []
-
   React.useEffect(() => {
-    getOwnRoom({ accessToken: cookies.access_token }).then((rooms: Room[]) =>
-      rooms.map((room) =>
-        getRoomSupervisorReports({
-          id: room.id,
-          accessToken: cookies.access_token,
-        }).then((report: Report[]) => roomReports.push(report))
+    if (raumBetreuerMeldungen.length === 0)
+      getOwnRoom({ accessToken: cookies.access_token }).then((rooms: Room[]) =>
+        rooms.forEach((room) =>
+          getRoomSupervisorReports({
+            id: room.id,
+            accessToken: cookies.access_token,
+          }).then((report: Report[]) => {
+            if (report.length > 0) {
+              setRaumBetreuerMeldungen([...raumBetreuerMeldungen, report])
+            }
+          })
+        )
       )
-    )
-    console.log('SET', roomReports)
-    setRaumBetreuerMeldungen(roomReports.flat(1))
   }, [])
 
   React.useEffect(() => {
-    getAllReportsReports({ accessToken: cookies.access_token }).then(
-      (report: Report[]) => setAlleMeldungen(report)
-    )
+    if (userData?.role === 'PC_WERKSTATT')
+      getAllReportsReports({ accessToken: cookies.access_token }).then(
+        (report: Report[]) => setAlleMeldungen(report)
+      )
   }, [])
-
-  console.log(raumBetreuerMeldungen)
 
   return (
     <PageLayout showHeaderButtons={true}>
@@ -121,7 +121,7 @@ export const Landingpage: FC = () => {
             )}
           </div>
         )}
-        {userData?.role !== 'RAUMBETREUER' && (
+        {userData?.role === 'RAUMBETREUER' && (
           <div className="overflow-y-scroll my-4 min-h-fit max-h-128 pb-6 px-8 w-full bg-white rounded-3xl">
             <div className="font-bold py-8 px-2 sm:px-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
               <div className="w-full text-center">
