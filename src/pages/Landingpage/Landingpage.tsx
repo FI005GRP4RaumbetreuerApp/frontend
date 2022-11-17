@@ -10,6 +10,7 @@ import {
 } from '../../api'
 import PageLayout from '../../layouts'
 import { Report, User } from '../../types'
+import { ReportingForm } from './ReportingForm'
 
 export const Landingpage: FC = () => {
   const [cookies] = useCookies(['access_token'])
@@ -33,12 +34,6 @@ export const Landingpage: FC = () => {
   const getUser = useGetUser()
 
   React.useEffect(() => {
-    getUser({ accessToken: cookies.access_token }).then((user: User) =>
-      setUser(user)
-    )
-  }, [])
-
-  React.useEffect(() => {
     getSelfMadeReports({ accessToken: cookies.access_token }).then(
       (report: Report[]) => setEigeneMeldungen(report)
     )
@@ -51,15 +46,6 @@ export const Landingpage: FC = () => {
   //     id: localStorage.getItem('selected-room'),
   //   }).then((report: Report[]) => setRaumMeldungen(report))
   // }, [])
-
-  React.useEffect(() => {
-    window.addEventListener('storage', () => {
-      getRoomReports({
-        accessToken: cookies.access_token,
-        id: localStorage.getItem('selected-room'),
-      }).then((report: Report[]) => setRaumMeldungen(report))
-    })
-  }, [])
 
   React.useEffect(() => {
     getRoomSupervisorReports({ accessToken: cookies.access_token }).then(
@@ -75,6 +61,7 @@ export const Landingpage: FC = () => {
 
   return (
     <PageLayout showHeaderButtons={true}>
+      <ReportingForm selectRoom={''} />
       <div className="px-64 gap-4 flex flex-col w-full h-full bg-backgroundGray justify-center items-center">
         <div className="overflow-y-scroll my-4 h-128 px-8 w-full bg-white rounded-3xl">
           <div className="font-bold p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">

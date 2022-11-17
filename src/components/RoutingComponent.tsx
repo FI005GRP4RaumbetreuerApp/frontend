@@ -1,32 +1,64 @@
 import { FC, useEffect, useState } from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from 'react-router-dom'
 import { LoginPage } from '../pages'
 import { Landingpage } from '../pages/Landingpage/Landingpage'
 import jwt_decode, { JwtPayload } from 'jwt-decode'
 import { useCookies } from 'react-cookie'
 
 export const RoutingComponent: FC = () => {
-  const [redirectIsAllowed, setRedirectIsAllowed] = useState(false)
+  const [redirectIsAllowed, setRedirectIsAllowed] = useState(true)
+  const [finishedLoading, setFinishedLoading] = useState(false)
   const [cookies] = useCookies(['access_token'])
 
-  useEffect(() => {
+  const checkForLoggedInStatus = (): void => {
     if (
+      cookies.access_token &&
+      cookies.access_token !== '' &&
       Math.floor(Date.now() / 1000) -
         (jwt_decode(cookies.access_token) as JwtPayload).iat <
-      900
+        900
     ) {
       setRedirectIsAllowed(true)
+      setFinishedLoading(true)
+    } else {
+      setRedirectIsAllowed(false)
+      setFinishedLoading(true)
     }
+  }
+
+  useEffect(() => {
+    checkForLoggedInStatus()
   }, [])
+
+  useEffect(() => {
+    checkForLoggedInStatus()
+  }, [cookies])
 
   return (
     <Router>
       <Switch>
         <Route path="/" exact>
-          <LoginPage setRedirectIsAllowed={setRedirectIsAllowed} />
+          {!redirectIsAllowed && finishedLoading ? (
+            <LoginPage setRedirectIsAllowed={setRedirectIsAllowed} />
+          ) : finishedLoading ? (
+            <Redirect to={'/overview'} />
+          ) : (
+            <></>
+          )}
         </Route>
         <Route path="/overview" exact>
-          {redirectIsAllowed && <Landingpage />}
+          {redirectIsAllowed && finishedLoading ? (
+            <Landingpage />
+          ) : finishedLoading ? (
+            <Redirect to={'/'} />
+          ) : (
+            <></>
+          )}
         </Route>
         <Route path="/">
           <div>404</div>
