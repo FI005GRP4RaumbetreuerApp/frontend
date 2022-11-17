@@ -25,15 +25,20 @@ export const Landingpage: FC = () => {
   >([])
   const [raumAlleMeldungen, setAlleMeldungen] = React.useState<Report[]>([])
 
-  const [user, setUser] = React.useState<User>()
-
-  const { certainRoomIdReports, selectedRoomId } = React.useContext(AppContext)
+  const { certainRoomIdReports, selectedRoomId, setUserData, userData } =
+    React.useContext(AppContext)
 
   const getSelfMadeReports = useGetSelfMadeReports()
 
   const getRoomSupervisorReports = useGetRoomSupervisorReports()
   const getAllReportsReports = useGetAllReports()
   const getUser = useGetUser()
+
+  useEffect(() => {
+    getUser({ accessToken: cookies.access_token }).then((userData: User) => {
+      setUserData(userData)
+    })
+  }, [])
 
   React.useEffect(() => {
     getSelfMadeReports({ accessToken: cookies.access_token }).then(
@@ -49,12 +54,13 @@ export const Landingpage: FC = () => {
     getOwnRoom({ accessToken: cookies.access_token }).then((rooms: Room[]) =>
       rooms.map((room) =>
         getRoomSupervisorReports({
-          accessToken: cookies.access_token,
           id: room.id,
+          accessToken: cookies.access_token,
         }).then((report: Report[]) => roomReports.push(report))
       )
     )
-    setRaumBetreuerMeldungen(roomReports)
+    console.log('SET', roomReports)
+    setRaumBetreuerMeldungen(roomReports.flat(1))
   }, [])
 
   React.useEffect(() => {
@@ -63,30 +69,66 @@ export const Landingpage: FC = () => {
     )
   }, [])
 
+  console.log(raumBetreuerMeldungen)
+
   return (
     <PageLayout showHeaderButtons={true}>
       <ReportingForm selectRoom={''} />
-      <div className="px-64 gap-4 flex flex-col w-full h-full bg-backgroundGray justify-center items-center">
-        <div className="overflow-y-scroll my-4 h-128 px-8 w-full bg-white rounded-3xl">
+      <div className="gap-4 flex flex-col max-w-sm sm:max-w-full w-full px-4 sm:px-16 md:px-24 lg:px-32 xl:px-64 h-full bg-backgroundGray justify-center items-center">
+        <div className="overflow-y-scroll my-4 min-h-fit max-h-128 pb-6 px-2 sm:px-8 mx-32 w-full bg-white rounded-3xl">
           <div className="font-bold p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
-            <div className="w-full">Eigene Meldungen</div>
+            <div className="w-full text-center">Eigene Meldungen</div>
           </div>
           {eigeneMeldungen.map((report) => (
-            <div className="hover:bg-gray-300 p-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
-              <div className="w-full">{report.description}</div>
+            <div className="hover:bg-gray-300 py-8 px-2 sm:px-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
+              <div className={'w-full'}>{report.description}</div>
               <div className="justify-between w-2/5 flex flex-row">
                 <div>{report.room}</div>
-                <div>{report.status}</div>
+                <div
+                  className={`${
+                    report.status === 'NEU'
+                      ? 'animate-bounce text-green-500'
+                      : ''
+                  }`}
+                >
+                  {report.status}
+                </div>
               </div>
             </div>
           ))}
         </div>
-        {certainRoomIdReports.length > 1 && (
-          <div className="overflow-y-scroll my-4 h-128 px-8 w-full bg-white rounded-3xl">
+        {selectedRoomId && (
+          <div className="overflow-y-scroll my-4 min-h-fit max-h-128 pb-6 px-8 w-full bg-white rounded-3xl">
             <div className="font-bold p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
-              <div className="w-full">Ausgewählter Raum</div>
+              <div className="w-full text-center">
+                {'Ausgewählter Raum: ' + selectedRoomId}
+              </div>
             </div>
-            {certainRoomIdReports.map((report) => (
+            {certainRoomIdReports.length > 0 ? (
+              certainRoomIdReports.map((report) => (
+                <div className="hover:bg-gray-300 py-8 px-2 sm:px-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
+                  <div className="w-full">{report.description}</div>
+                  <div className="justify-between w-2/5 flex flex-row">
+                    <div>{report.room}</div>
+                    <div>{report.status}</div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-stone-500 text-xl text-center">
+                Aktuell gibt es keine Meldungen für diesen Raum
+              </div>
+            )}
+          </div>
+        )}
+        {userData?.role !== 'RAUMBETREUER' && (
+          <div className="overflow-y-scroll my-4 min-h-fit max-h-128 pb-6 px-8 w-full bg-white rounded-3xl">
+            <div className="font-bold py-8 px-2 sm:px-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
+              <div className="w-full text-center">
+                Meldungen für den Raumbetreuer
+              </div>
+            </div>
+            {raumBetreuerMeldungen.flat(2).map((report) => (
               <div className="hover:bg-gray-300 p-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
                 <div className="w-full">{report.description}</div>
                 <div className="justify-between w-2/5 flex flex-row">
@@ -97,34 +139,22 @@ export const Landingpage: FC = () => {
             ))}
           </div>
         )}
-        <div className="overflow-y-scroll my-4 h-128 px-8 w-full bg-white rounded-3xl">
-          <div className="font-bold p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
-            <div className="w-full">Meldungen für den Raumbetreuer</div>
-          </div>
-          {raumBetreuerMeldungen.flat(Infinity).map((report) => (
-            <div className="hover:bg-gray-300 p-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
-              <div className="w-full">{report.description}</div>
-              <div className="justify-between w-2/5 flex flex-row">
-                <div>{report.room}</div>
-                <div>{report.status}</div>
-              </div>
+        {userData?.role === 'PC_WERKSTATT' && (
+          <div className="overflow-y-scroll my-4 min-h-fit max-h-128 pb-6 px-8 w-full bg-white rounded-3xl">
+            <div className="font-bold py-8 px-2 sm:px-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
+              <div className="w-full text-center">Alle Meldungen</div>
             </div>
-          ))}
-        </div>
-        <div className="overflow-y-scroll my-4 h-128 px-8 w-full bg-white rounded-3xl">
-          <div className="font-bold p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
-            <div className="w-full">Alle Meldungen</div>
-          </div>
-          {raumAlleMeldungen.map((report) => (
-            <div className="hover:bg-gray-300 p-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
-              <div className="w-full">{report.description}</div>
-              <div className="justify-between w-2/5 flex flex-row">
-                <div>{report.room}</div>
-                <div>{report.status}</div>
+            {raumAlleMeldungen.map((report) => (
+              <div className="hover:bg-gray-300 p-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
+                <div className="w-full">{report.description}</div>
+                <div className="justify-between w-2/5 flex flex-row">
+                  <div>{report.room}</div>
+                  <div>{report.status}</div>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </PageLayout>
   )
