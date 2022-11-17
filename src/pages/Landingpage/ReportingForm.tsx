@@ -1,12 +1,12 @@
 import { FC, useEffect, useState } from 'react'
-import { Dialog, Listbox  } from '@headlessui/react'
-import { useCookies } from "react-cookie";
+import { Dialog, Listbox } from '@headlessui/react'
+import { useCookies } from 'react-cookie'
 import { useHistory } from 'react-router-dom'
-import useAddReport from "../../api/useAddReport";
-import { AddReport } from "../../types/AddReport";
+import useAddReport from '../../api/useAddReport'
+import { AddReport } from '../../types/AddReport'
 import Input from '../../components/Input'
 
-interface Props{
+interface Props {
   selectRoom: string
 }
 
@@ -16,16 +16,24 @@ const reportTypes = [
 ]
 const meldungsStatus = [
   { id: 1, key: 'NEU', label: 'Neu' },
-  { id: 2, key: 'IN_BEARBEITUNG_RAUMBETREUER', label: 'In Beareitung Raumbetreuer' },
-  { id: 2, key: 'IN_BEARBEITUNG_PC_WERKSTATT', label: 'In Bearbeitung PC Werkstatt' },
+  {
+    id: 2,
+    key: 'IN_BEARBEITUNG_RAUMBETREUER',
+    label: 'In Beareitung Raumbetreuer',
+  },
+  {
+    id: 2,
+    key: 'IN_BEARBEITUNG_PC_WERKSTATT',
+    label: 'In Bearbeitung PC Werkstatt',
+  },
   { id: 2, key: 'GESCHLOSSEN', label: 'Geschlossen' },
 ]
 
-export const ReportingForm: FC<Props> = ({selectRoom}) => {
-  const [openDialogForm, setOpenDialogForm] = useState(false);
-  const [cookies] = useCookies(['access_token']);
-  const history = useHistory();
-  const AddReportForm = useAddReport();
+export const ReportingForm: FC<Props> = ({ selectRoom }) => {
+  const [openDialogForm, setOpenDialogForm] = useState(false)
+  const [cookies] = useCookies(['access_token'])
+  const history = useHistory()
+  const AddReportForm = useAddReport()
   const [meldungsTyp, setMeldungsTyp] = useState<string>('')
   const [raumId, setraumId] = useState<string>(selectRoom)
   const [geraeteTypId, setGeraeteTypId] = useState<string>('')
@@ -35,7 +43,6 @@ export const ReportingForm: FC<Props> = ({selectRoom}) => {
 
   const [errorMessage, setErrorMessage] = useState<string>('')
 
-
   const addReportForm = async (
     accessToken: string,
     meldungs_typ: string,
@@ -43,13 +50,21 @@ export const ReportingForm: FC<Props> = ({selectRoom}) => {
     geraete_typ_id: string,
     description: string,
     geraete_id: string,
-    status: string,
+    status: string
   ): Promise<void> => {
     try {
-      const addReportResponse: AddReport[] = await AddReportForm({ accessToken, meldungs_typ ,raum_id,geraete_typ_id,description,geraete_id,status})
+      const addReportResponse: AddReport[] = await AddReportForm({
+        accessToken,
+        meldungs_typ,
+        raum_id,
+        geraete_typ_id,
+        description,
+        geraete_id,
+        status,
+      })
 
       if (addReportResponse) {
-       // setOpenDialogForm(false)
+        // setOpenDialogForm(false)
         history.push('/overview')
       }
     } catch (e) {
@@ -59,7 +74,7 @@ export const ReportingForm: FC<Props> = ({selectRoom}) => {
     }
   }
 
-    return (
+  return (
     <div className="flex py-5 items-start justify-start px-64 mr-auto">
       <button
         type="button"
@@ -92,7 +107,11 @@ export const ReportingForm: FC<Props> = ({selectRoom}) => {
               <Dialog.Title className="flex justify-center items-center bg-primary text-white font-bold h-16 rounded-t-2xl">
                 Defekt für Raum [FI005] melden
               </Dialog.Title>
-              { errorMessage.length > 0 ? <div className="px-5 py-3 text-red-700 bg-red-100">{errorMessage}</div> : null}
+              {errorMessage.length > 0 ? (
+                <div className="px-5 py-3 text-red-700 bg-red-100">
+                  {errorMessage}
+                </div>
+              ) : null}
 
               <div className="flex flex-col gap-4 w-full h-fit bg-white px-4 py-12 md:px-32">
                 <Input
@@ -112,9 +131,11 @@ export const ReportingForm: FC<Props> = ({selectRoom}) => {
                 />
                 <div className="relative">
                   <Listbox value={status} onChange={setStatus}>
-                    <Listbox.Button
-                      className="text-left bg-backgroundGray px-5 py-2 rounded-2xl w-96 placeholder-neutral-600 text-neutral-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-                    >{status ? meldungsStatus.find(s => s.key === status).label : 'Auswahl'}</Listbox.Button>
+                    <Listbox.Button className="text-left bg-backgroundGray px-5 py-2 rounded-2xl w-96 placeholder-neutral-600 text-neutral-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
+                      {status
+                        ? meldungsStatus.find((s) => s.key === status).label
+                        : 'Auswahl'}
+                    </Listbox.Button>
                     <Listbox.Options className="w-full absolute top-10 left-0 z-50 bg-white p-3 rounded-xl shadow flex flex-col gap-2 divide-y">
                       {meldungsStatus.map((status) => (
                         <Listbox.Option
@@ -130,9 +151,11 @@ export const ReportingForm: FC<Props> = ({selectRoom}) => {
                 </div>
                 <div className="relative">
                   <Listbox value={meldungsTyp} onChange={setMeldungsTyp}>
-                    <Listbox.Button
-                      className="text-left bg-backgroundGray px-5 py-2 rounded-2xl w-96 placeholder-neutral-600 text-neutral-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-                    >{meldungsTyp ? reportTypes.find(s => s.key === meldungsTyp).label : 'Auswahl'}</Listbox.Button>
+                    <Listbox.Button className="text-left bg-backgroundGray px-5 py-2 rounded-2xl w-96 placeholder-neutral-600 text-neutral-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
+                      {meldungsTyp
+                        ? reportTypes.find((s) => s.key === meldungsTyp).label
+                        : 'Auswahl'}
+                    </Listbox.Button>
                     <Listbox.Options className="w-full absolute top-10 left-0 z-50 bg-white p-3 rounded-xl shadow flex flex-col gap-2 divide-y">
                       {reportTypes.map((personType) => (
                         <Listbox.Option
@@ -156,7 +179,17 @@ export const ReportingForm: FC<Props> = ({selectRoom}) => {
               <div className="flex justify-center items-center bg-primary h-16 w-full gap-4 rounded-b-2xl">
                 <button
                   className="w-32 rounded-2xl py-1 px-2 bg-secondary text-slate-200 hover:outline hover:outline-secondary hover:bg-primary"
-                  onClick={() => addReportForm(cookies.access_token,meldungsTyp,raumId,geraeteTypId,description,geraeteId,status)}
+                  onClick={() =>
+                    addReportForm(
+                      cookies.access_token,
+                      meldungsTyp,
+                      raumId,
+                      geraeteTypId,
+                      description,
+                      geraeteId,
+                      status
+                    )
+                  }
                 >
                   Absenden
                 </button>

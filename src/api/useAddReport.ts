@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { AddReport } from "../types/AddReport";
+import { AddReport } from '../types/AddReport'
 
 interface useAddReportsProps {
   accessToken: string
@@ -11,17 +11,24 @@ interface useAddReportsProps {
   status: string
 }
 
-const useAddReports = (): ({
-                             accessToken,
-                             meldungs_typ,
-                             raum_id,
-                             geraete_typ_id,
-                             description,
-                             geraete_id,
-                             status
-                           }: useAddReportsProps) => Promise<AddReport[]> => {
-  return async ({ accessToken,meldungs_typ,raum_id,geraete_typ_id,description,geraete_id,status }: useAddReportsProps): Promise<AddReport[]> => {
-
+const useAddReports = (): (({
+  accessToken,
+  meldungs_typ,
+  raum_id,
+  geraete_typ_id,
+  description,
+  geraete_id,
+  status,
+}: useAddReportsProps) => Promise<AddReport[]>) => {
+  return async ({
+    accessToken,
+    meldungs_typ,
+    raum_id,
+    geraete_typ_id,
+    description,
+    geraete_id,
+    status,
+  }: useAddReportsProps): Promise<AddReport[]> => {
     const bodyContent = {
       meldungs_typ,
       raum_id,
