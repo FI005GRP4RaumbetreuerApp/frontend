@@ -8,6 +8,7 @@ import useGetAllReports from './useGetAllReports'
 import useGetRoomReports from './useGetRoomReports'
 import useGetRoomSupervisorReports from './useGetRoomSupervisorReports'
 import useGetSelfMadeReports from './useGetSelfMadeReports'
+import useGetOwnRoom from './useGetOwnRoom'
 
 export {
   useLogin,

@@ -8,8 +8,9 @@ import {
   useGetSelfMadeReports,
   useGetUser,
 } from '../../api'
+import useGetOwnRoom from '../../api/useGetOwnRoom'
 import PageLayout from '../../layouts'
-import { Report, User } from '../../types'
+import { Report, Room, User } from '../../types'
 
 export const Landingpage: FC = () => {
   const [cookies] = useCookies(['access_token'])
@@ -60,6 +61,10 @@ export const Landingpage: FC = () => {
       }).then((report: Report[]) => setRaumMeldungen(report))
     })
   }, [])
+
+  const getOwnRoom = useGetOwnRoom()
+
+  const [ownRoom, setOwnRoom] = React.useState<Room>()
 
   React.useEffect(() => {
     getRoomSupervisorReports({ accessToken: cookies.access_token }).then(
