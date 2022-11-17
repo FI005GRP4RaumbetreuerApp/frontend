@@ -50,7 +50,9 @@ const LoginForm: FC<LoginFormProps> = ({
       <span className="text-gray-400 text-2xl mt-8">Login-Raumbetreuer</span>
 
       <Input
-        className={`w-4/5 ${emailIsInvalid ? 'mt-2' : 'mt-8'}`}
+        className={`w-4/5 ${
+          emailIsInvalid || credentialsWrong ? 'mt-2' : 'mt-8'
+        }`}
         errorMessage={
           emailIsInvalid
             ? 'E-Mail hat das falsche Format'
