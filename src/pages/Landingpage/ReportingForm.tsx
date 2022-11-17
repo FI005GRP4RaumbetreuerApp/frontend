@@ -41,9 +41,9 @@ export const ReportingForm: FC<Props> = ({selectRoom}) => {
 
   const getRooms = useGetRooms()
 
-    getRooms({ accessToken: cookies.access_token }).then(
-      (res: Room[]) => setRooms(res)
-    )
+  getRooms({ accessToken: cookies.access_token }).then(
+    (res: Room[]) => setRooms(res)
+  )
 
 
   const addReportForm = async (
@@ -59,7 +59,7 @@ export const ReportingForm: FC<Props> = ({selectRoom}) => {
       const addReportResponse: AddReport[] = await AddReportForm({ accessToken, meldungs_typ ,raum_id,geraete_typ_id,description,geraete_id,status})
 
       if (addReportResponse) {
-       // setOpenDialogForm(false)
+        // setOpenDialogForm(false)
         history.push('/overview')
       }
     } catch (e) {
@@ -69,7 +69,7 @@ export const ReportingForm: FC<Props> = ({selectRoom}) => {
     }
   }
 
-    return (
+  return (
     <div className="flex py-5 items-start justify-start px-64 mr-auto">
       <button
         type="button"
@@ -174,7 +174,7 @@ export const ReportingForm: FC<Props> = ({selectRoom}) => {
                       className="flex justify-between items-center text-left bg-backgroundGray px-5 py-2 rounded-2xl w-96 placeholder-neutral-600 text-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                     >
                       <span>{meldungsTyp ? reportTypes.find(s => s.key === meldungsTyp).label : 'Meldungstype auswählen'}</span>
-                    <span className="">
+                      <span className="">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                            stroke="currentColor" className="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
