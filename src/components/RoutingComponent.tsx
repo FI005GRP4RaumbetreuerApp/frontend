@@ -10,7 +10,7 @@ import { Landingpage } from '../pages/Landingpage/Landingpage'
 import jwt_decode, { JwtPayload } from 'jwt-decode'
 import { useCookies } from 'react-cookie'
 import AppContext from '../AppContext'
-import { Report } from '../types'
+import { Report, User } from '../types'
 
 export const RoutingComponent: FC = () => {
   const [redirectIsAllowed, setRedirectIsAllowed] = useState(true)
@@ -19,6 +19,7 @@ export const RoutingComponent: FC = () => {
 
   const [selectedRoomId, setSelectedRoomId] = useState<string>('')
   const [certainRoomIdReports, setCertainRoomIdReports] = useState<Report[]>([])
+  const [userData, setUserData] = useState<User>()
 
   const checkForLoggedInStatus = (): void => {
     if (
@@ -51,6 +52,8 @@ export const RoutingComponent: FC = () => {
         setSelectedRoomId,
         certainRoomIdReports,
         setCertainRoomIdReports,
+        userData,
+        setUserData,
       }}
     >
       <Router>

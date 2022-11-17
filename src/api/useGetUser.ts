@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Room, User } from '../types'
+import { User } from '../types'
 
 interface useGetUserProps {
   accessToken: string
