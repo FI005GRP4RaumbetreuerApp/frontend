@@ -85,14 +85,22 @@ const LoginForm: FC<LoginFormProps> = ({
         >
           Anmelden
         </button>
-        <button
-          className="cursor-pointer text-gray-500 hover:text-primary"
-          onClick={() =>
-            setCurrentComponentIndex('PasswordResetInitiationForm')
-          }
-        >
-          Passwort Zurücksetzen
-        </button>
+        <div className="flex flex-col items-center">
+          <button
+            className="cursor-pointer text-gray-500 hover:text-primary"
+            onClick={() =>
+              setCurrentComponentIndex('PasswordResetInitiationForm')
+            }
+          >
+            Passwort Zurücksetzen
+          </button>
+          <button
+            className="cursor-pointer text-gray-500 hover:text-primary"
+            onClick={() => setCurrentComponentIndex('RegistrationForm')}
+          >
+            Registrieren
+          </button>
+        </div>
       </div>
     </div>
   )

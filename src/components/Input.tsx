@@ -4,6 +4,7 @@ interface InputProps {
   errorMessage?: string
   type?: string
   placeHolder?: string
+  maxLength?: number
   className?: string
   onChange: (value: string) => void
 }
@@ -11,6 +12,7 @@ const Input: FC<InputProps> = ({
   errorMessage,
   placeHolder,
   className,
+  maxLength,
   type = 'text',
   onChange,
 }) => {
@@ -26,6 +28,7 @@ const Input: FC<InputProps> = ({
       <input
         className="w-full h-12 bg-backgroundGray rounded-xl text-gray-500 px-4"
         type={type}
+        maxLength={maxLength || 100}
         placeholder={placeHolder}
         onChange={(e) => {
           onChange(e.currentTarget.value)

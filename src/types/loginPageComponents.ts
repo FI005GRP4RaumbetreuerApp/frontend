@@ -3,3 +3,5 @@ export type LoginPageComponents =
   | 'PasswordResetInitiationForm'
   | 'PasswordResetForm'
   | 'ResetSuccessfullDialog'
+  | 'RegistrationForm'
+  | 'RegistrationSuccessfull'
