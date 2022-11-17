@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FC } from 'react'
 import { useCookies } from 'react-cookie'
 import {
@@ -8,6 +8,7 @@ import {
   useGetSelfMadeReports,
   useGetUser,
 } from '../../api'
+import AppContext from '../../AppContext'
 import PageLayout from '../../layouts'
 import { Report, User } from '../../types'
 import { ReportingForm } from './ReportingForm'
@@ -24,10 +25,9 @@ export const Landingpage: FC = () => {
 
   const [user, setUser] = React.useState<User>()
 
-  const [selectedRoom, setSelectedRoom] = React.useState('')
+  const { certainRoomIdReports, selectedRoomId } = React.useContext(AppContext)
 
   const getSelfMadeReports = useGetSelfMadeReports()
-  const getRoomReports = useGetRoomReports()
 
   const getRoomSupervisorReports = useGetRoomSupervisorReports()
   const getAllReportsReports = useGetAllReports()
@@ -38,14 +38,6 @@ export const Landingpage: FC = () => {
       (report: Report[]) => setEigeneMeldungen(report)
     )
   }, [])
-
-  // React.useEffect(() => {
-  //   console.log('HALLK')
-  //   getRoomReports({
-  //     accessToken: cookies.access_token,
-  //     id: localStorage.getItem('selected-room'),
-  //   }).then((report: Report[]) => setRaumMeldungen(report))
-  // }, [])
 
   React.useEffect(() => {
     getRoomSupervisorReports({ accessToken: cookies.access_token }).then(
@@ -58,6 +50,8 @@ export const Landingpage: FC = () => {
       (report: Report[]) => setAlleMeldungen(report)
     )
   }, [])
+
+  console.log('nigger', certainRoomIdReports)
 
   return (
     <PageLayout showHeaderButtons={true}>
@@ -77,20 +71,22 @@ export const Landingpage: FC = () => {
             </div>
           ))}
         </div>
-        <div className="overflow-y-scroll my-4 h-128 px-8 w-full bg-white rounded-3xl">
-          <div className="font-bold p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
-            <div className="w-full">Ausgewählter Raum</div>
-          </div>
-          {raumMeldungen.map((report) => (
-            <div className="hover:bg-gray-300 p-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
-              <div className="w-full">{report.description}</div>
-              <div className="justify-between w-2/5 flex flex-row">
-                <div>{report.room}</div>
-                <div>{report.status}</div>
-              </div>
+        {certainRoomIdReports.length > 1 && (
+          <div className="overflow-y-scroll my-4 h-128 px-8 w-full bg-white rounded-3xl">
+            <div className="font-bold p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
+              <div className="w-full">Ausgewählter Raum</div>
             </div>
-          ))}
-        </div>
+            {certainRoomIdReports.map((report) => (
+              <div className="hover:bg-gray-300 p-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
+                <div className="w-full">{report.description}</div>
+                <div className="justify-between w-2/5 flex flex-row">
+                  <div>{report.room}</div>
+                  <div>{report.status}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
         <div className="overflow-y-scroll my-4 h-128 px-8 w-full bg-white rounded-3xl">
           <div className="font-bold p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
             <div className="w-full">Meldungen für den Raumbetreuer</div>
