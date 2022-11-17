@@ -3,23 +3,22 @@ import { FC } from 'react'
 import { useCookies } from 'react-cookie'
 import {
   useGetAllReports,
-  useGetRoomReports,
   useGetRoomSupervisorReports,
   useGetSelfMadeReports,
   useGetUser,
 } from '../../api'
+import useGetOwnRoom from '../../api/useGetOwnRoom'
 import AppContext from '../../AppContext'
 import PageLayout from '../../layouts'
-import { Report, User } from '../../types'
+import { Report, Room, User } from '../../types'
 import { ReportingForm } from './ReportingForm'
 
 export const Landingpage: FC = () => {
   const [cookies] = useCookies(['access_token'])
 
   const [eigeneMeldungen, setEigeneMeldungen] = React.useState<Report[]>([])
-  const [raumMeldungen, setRaumMeldungen] = React.useState<Report[]>([])
   const [raumBetreuerMeldungen, setRaumBetreuerMeldungen] = React.useState<
-    Report[]
+    Report[][]
   >([])
   const [raumAlleMeldungen, setAlleMeldungen] = React.useState<Report[]>([])
 
@@ -44,16 +43,29 @@ export const Landingpage: FC = () => {
     )
   }, [])
 
+  const getOwnRoom = useGetOwnRoom()
+
   React.useEffect(() => {
-    getRoomSupervisorReports({ accessToken: cookies.access_token }).then(
-      (report: Report[]) => setRaumBetreuerMeldungen(report)
-    )
+    if (raumBetreuerMeldungen.length === 0)
+      getOwnRoom({ accessToken: cookies.access_token }).then((rooms: Room[]) =>
+        rooms.forEach((room) =>
+          getRoomSupervisorReports({
+            id: room.id,
+            accessToken: cookies.access_token,
+          }).then((report: Report[]) => {
+            if (report.length > 0) {
+              setRaumBetreuerMeldungen([...raumBetreuerMeldungen, report])
+            }
+          })
+        )
+      )
   }, [])
 
   React.useEffect(() => {
-    getAllReportsReports({ accessToken: cookies.access_token }).then(
-      (report: Report[]) => setAlleMeldungen(report)
-    )
+    if (userData?.role === 'PC_WERKSTATT')
+      getAllReportsReports({ accessToken: cookies.access_token }).then(
+        (report: Report[]) => setAlleMeldungen(report)
+      )
   }, [])
 
   return (
@@ -113,7 +125,7 @@ export const Landingpage: FC = () => {
                 Meldungen für den Raumbetreuer
               </div>
             </div>
-            {raumBetreuerMeldungen.map((report) => (
+            {raumBetreuerMeldungen.flat(2).map((report) => (
               <div className="hover:bg-gray-300 p-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
                 <div className="w-full">{report.description}</div>
                 <div className="justify-between w-2/5 flex flex-row">
