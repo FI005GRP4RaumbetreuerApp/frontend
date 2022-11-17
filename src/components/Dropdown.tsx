@@ -1,16 +1,20 @@
 import * as React from 'react'
 import { useCookies } from 'react-cookie'
-import { useGetRooms } from '../api'
-import { Room } from '../types'
+import { useGetRoomReports, useGetRooms } from '../api'
+import AppContext from '../AppContext'
+import { Report, Room } from '../types'
 
-const App = () => {
+const App: React.FC = () => {
+  const { setCertainRoomIdReports, setSelectedRoomId, selectedRoomId } =
+    React.useContext(AppContext)
+
   const [cookies] = useCookies(['access_token'])
 
   const [rooms, setRooms] = React.useState<Room[]>([])
 
   const [open, setOpen] = React.useState(false)
 
-  const [room, setRoom] = React.useState('-')
+  const getRoomReports = useGetRoomReports()
 
   const getRooms = useGetRooms()
 
@@ -20,25 +24,22 @@ const App = () => {
     )
   }, [])
 
-  const handleOpen = () => {
+  const handleRoomSelection = (key: string) => {
+    setSelectedRoomId(key)
+    getRoomReports({
+      id: key,
+      accessToken: cookies.access_token,
+    }).then((reports: Report[]) => setCertainRoomIdReports(reports))
     setOpen(!open)
   }
-
-  const handleRoomSelection = (key) => {
-    setRoom(`${key}`)
-    localStorage.setItem('selected-room', key)
-    setOpen(!open)
-  }
-
-  console.log(rooms)
 
   return (
     <div className="text-white">
       <button
         className="bg-secondary w-24 h-12 rounded-3xl text-xl flex items-center justify-around"
-        onClick={handleOpen}
+        onClick={() => setOpen(!open)}
       >
-        {room}
+        {selectedRoomId}
         {open == false && (
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -9,11 +9,17 @@ import { LoginPage } from '../pages'
 import { Landingpage } from '../pages/Landingpage/Landingpage'
 import jwt_decode, { JwtPayload } from 'jwt-decode'
 import { useCookies } from 'react-cookie'
+import AppContext from '../AppContext'
+import { Report, User } from '../types'
 
 export const RoutingComponent: FC = () => {
   const [redirectIsAllowed, setRedirectIsAllowed] = useState(true)
   const [finishedLoading, setFinishedLoading] = useState(false)
   const [cookies] = useCookies(['access_token'])
+
+  const [selectedRoomId, setSelectedRoomId] = useState<string>('')
+  const [certainRoomIdReports, setCertainRoomIdReports] = useState<Report[]>([])
+  const [userData, setUserData] = useState<User>()
 
   const checkForLoggedInStatus = (): void => {
     if (
@@ -40,30 +46,41 @@ export const RoutingComponent: FC = () => {
   }, [cookies])
 
   return (
-    <Router>
-      <Switch>
-        <Route path="/" exact>
-          {!redirectIsAllowed && finishedLoading ? (
-            <LoginPage setRedirectIsAllowed={setRedirectIsAllowed} />
-          ) : finishedLoading ? (
-            <Redirect to={'/overview'} />
-          ) : (
-            <></>
-          )}
-        </Route>
-        <Route path="/overview" exact>
-          {redirectIsAllowed && finishedLoading ? (
-            <Landingpage />
-          ) : finishedLoading ? (
-            <Redirect to={'/'} />
-          ) : (
-            <></>
-          )}
-        </Route>
-        <Route path="/">
-          <div>404</div>
-        </Route>
-      </Switch>
-    </Router>
+    <AppContext.Provider
+      value={{
+        selectedRoomId,
+        setSelectedRoomId,
+        certainRoomIdReports,
+        setCertainRoomIdReports,
+        userData,
+        setUserData,
+      }}
+    >
+      <Router>
+        <Switch>
+          <Route path="/" exact>
+            {!redirectIsAllowed && finishedLoading ? (
+              <LoginPage setRedirectIsAllowed={setRedirectIsAllowed} />
+            ) : finishedLoading ? (
+              <Redirect to={'/overview'} />
+            ) : (
+              <></>
+            )}
+          </Route>
+          <Route path="/overview" exact>
+            {redirectIsAllowed && finishedLoading ? (
+              <Landingpage />
+            ) : finishedLoading ? (
+              <Redirect to={'/'} />
+            ) : (
+              <></>
+            )}
+          </Route>
+          <Route path="/">
+            <div>404</div>
+          </Route>
+        </Switch>
+      </Router>
+    </AppContext.Provider>
   )
 }
