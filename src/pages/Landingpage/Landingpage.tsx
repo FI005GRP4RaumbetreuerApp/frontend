@@ -1,5 +1,4 @@
 import { FC } from 'react'
-import { useCookies } from 'react-cookie'
 import { useGetReports } from '../../api'
 import PageLayout from '../../layouts'
 

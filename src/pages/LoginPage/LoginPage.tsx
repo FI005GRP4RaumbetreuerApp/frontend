@@ -3,8 +3,10 @@ import {
   LoginForm,
   PasswordResetInitiationForm,
   PasswordResetSuccessfullDialog,
+  RegistationSuccessfullDialog,
 } from '../../components'
 import PasswordResetForm from '../../components/PasswordResetForm'
+import RegistrationForm from '../../components/RegistrationForm'
 import PageLayout from '../../layouts'
 import { LoginPageComponents } from '../../types'
 
@@ -28,6 +30,12 @@ export const LoginPage: FC<LoginPageProps> = ({ setRedirectIsAllowed }) => {
         />
       ) : currentComponentIndex === 'ResetSuccessfullDialog' ? (
         <PasswordResetSuccessfullDialog
+          setCurrentComponentIndex={setCurrentComponentIndex}
+        />
+      ) : currentComponentIndex === 'RegistrationForm' ? (
+        <RegistrationForm setCurrentComponentIndex={setCurrentComponentIndex} />
+      ) : currentComponentIndex === 'RegistrationSuccessfull' ? (
+        <RegistationSuccessfullDialog
           setCurrentComponentIndex={setCurrentComponentIndex}
         />
       ) : (
