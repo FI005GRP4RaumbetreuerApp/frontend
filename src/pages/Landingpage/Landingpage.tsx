@@ -2,6 +2,7 @@ import { FC } from 'react'
 import { useCookies } from 'react-cookie'
 import { useGetReports } from '../../api'
 import PageLayout from '../../layouts'
+import { ReportingForm } from "./ReportingForm";
 
 export const Landingpage: FC = () => {
   const [cookies] = useCookies(['access_token'])
@@ -12,6 +13,7 @@ export const Landingpage: FC = () => {
 
   return (
     <PageLayout showHeaderButtons={true}>
+      <ReportingForm selectRoom={''}/>
       <div className="px-64 gap-4 flex flex-col w-full h-full bg-backgroundGray justify-center items-center">
         <div className="overflow-y-scroll my-4 h-128 px-8 w-full bg-white rounded-3xl">
           <div className="font-bold p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
