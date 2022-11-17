@@ -4,7 +4,7 @@ interface HeaderProps {
   showHeaderButtons: boolean
 }
 
-const Header: FC<HeaderProps> = ({ showHeaderButtons }) => {
+const Header: FC<HeaderProps> = ({ showHeaderButtons = false }) => {
   return (
     <div className="flex flex-col bg-primary h-32 w-full justify-center items-center">
       <span className=" text-white   sm:text-4xl xs:text-3xl text-2xl">

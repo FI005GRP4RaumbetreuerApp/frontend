@@ -1,60 +1,118 @@
-import { FC, useState } from 'react'
-import * as EmailValidator from 'email-validator'
+import { FC, useEffect, useState } from 'react'
+import { LoginPageComponents } from '../types'
+import Input from './Input'
+import { usePasswordReset } from '../api'
 
 interface PasswordResetFormProps {
-  setPasswortReseting: (reseting: boolean) => void
+  setCurrentComponentIndex: (component: LoginPageComponents) => void
 }
 
 const PasswordResetForm: FC<PasswordResetFormProps> = ({
-  setPasswortReseting,
+  setCurrentComponentIndex,
 }) => {
-  const [email, setEmail] = useState<string>('')
-  const [emailIsInvalid, setEmailIsInvalid] = useState<boolean>(false)
+  const [password, setPassword] = useState<string>('')
+  const [passwordConfirmation, setPasswordConfirmation] = useState<string>('')
+  const [authenticationCode, setAuthenticationCode] = useState<string>('')
+  const [passwordsNotSame, setPasswordNotSame] = useState<boolean>(false)
+  const [authenticationCodeIsWrong, setAuthenticationCodeIsWrong] =
+    useState<boolean>(false)
+
+  useEffect(() => {
+    if (password && passwordConfirmation) {
+      setPasswordNotSame(password !== passwordConfirmation)
+    } else {
+      setPasswordNotSame(false)
+    }
+  }, [password, passwordConfirmation])
+
+  const passwordReset = usePasswordReset()
+
+  const initiatePasswordReset = (): void => {
+    try {
+      passwordReset({
+        password,
+        passwordConfirmation,
+        authenticationCode,
+      }).then(
+        (value: boolean) => {
+          if (value) setCurrentComponentIndex('ResetSuccessfullDialog')
+        },
+        () => {
+          setAuthenticationCodeIsWrong(true)
+        }
+      )
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   return (
-    <div className="flex flex-col h-96 w-4/5 xs:w-96 bg-white rounded-3xl items-center">
+    <div className="flex flex-col h-128 w-4/5 xs:w-96 bg-white rounded-3xl items-center">
       <span className="text-gray-400 text-2xl mt-8">Passwort Reset</span>
-      <div className="mt-8">
-        <span className="text-left text-gray-400">
-          Bitte geben Sie ihre E-Mail an
+      <div className="mt-6 text-center text-xs mb-2">
+        <span className="text-gray-400">
+          An die angegebene E-Mail wurde ein Authentifizierungscode gesendet
         </span>
       </div>
 
-      <div className={`w-4/5 ${emailIsInvalid ? 'mt-2' : 'mt-8'}`}>
-        <span
-          className={`text-xs text-red-500 h-full ${
-            emailIsInvalid ? '' : 'hidden'
-          }`}
-        >
-          Passwort hat das falsche Format
-        </span>
-        <input
-          className="w-full h-12 bg-backgroundGray rounded-xl text-gray-500 px-4"
-          type="text"
-          placeholder="E-Mail"
-          onChange={(e) => {
-            setEmail(e.currentTarget.value)
-          }}
-        />
-      </div>
+      <Input
+        className={`w-4/5 ${
+          passwordsNotSame || authenticationCodeIsWrong ? '' : 'mt-6'
+        }`}
+        errorMessage={
+          passwordsNotSame
+            ? 'Passwort Bestätigung stimmt mit dem Passwort überein'
+            : authenticationCodeIsWrong
+            ? 'Der Authentifizierungscode ist falsch'
+            : ''
+        }
+        placeHolder="Passwort"
+        onChange={(value: string) => setPassword(value)}
+      />
+
+      <Input
+        className={`w-4/5 mt-6`}
+        placeHolder="Passwort bestätigen"
+        onChange={(value: string) => setPasswordConfirmation(value)}
+      />
+
+      <Input
+        className={`w-4/5 mt-6`}
+        placeHolder="Authentifizierungscode"
+        onChange={(value: string) => setAuthenticationCode(value)}
+      />
 
       <div className="flex flex-col items-center w-3/5 gap-4 mt-8">
         <button
           className={`${
-            !email ? 'bg-gray-300 text-gray-500' : 'bg-primary text-white'
+            !password ||
+            !passwordConfirmation ||
+            passwordsNotSame ||
+            !authenticationCode
+              ? 'bg-gray-300 text-gray-500'
+              : 'bg-primary text-white'
           }  w-full h-12 rounded-2xl text-xl`}
-          disabled={!email}
+          disabled={
+            !password ||
+            !passwordConfirmation ||
+            passwordsNotSame ||
+            !authenticationCode
+          }
           onClick={() => {
-            setEmailIsInvalid(!EmailValidator.validate(email))
+            console.log('LOL')
+
+            initiatePasswordReset()
           }}
         >
-          Absenden
+          Passwort Zurücksetzen
         </button>
         <button
           className={'bg-primary text-white w-full h-12 rounded-2xl text-xl'}
-          onClick={() => setPasswortReseting(false)}
+          onClick={() => {
+            setCurrentComponentIndex('LoginForm')
+          }}
         >
-          Zurück
+          Abbrechen
         </button>
       </div>
     </div>
