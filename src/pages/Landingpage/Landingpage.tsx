@@ -170,7 +170,7 @@ export const Landingpage: FC = () => {
           <div className="overflow-y-scroll my-4 min-h-fit max-h-128 pb-6 px-8 w-full bg-white rounded-3xl">
             <div className="font-bold py-8 px-2 sm:px-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
               <div className="w-full text-center">
-                Meldungen für den Raumbetreuer
+                Meldungen für {userData.vorname + ' ' + userData.nachname}
               </div>
             </div>
             {raumBetreuerMeldungen.flat(2).map((report) => (
