@@ -21,4 +21,5 @@ export {
   useGetRoomReports,
   useGetRoomSupervisorReports,
   useGetSelfMadeReports,
+  useGetOwnRoom,
 }
