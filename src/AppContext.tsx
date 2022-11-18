@@ -9,6 +9,8 @@ export type AppContextType = {
   setCertainRoomIdReports: (rooms: Report[]) => void
   userData: User
   setUserData: (userData: User) => void
+  newReportIncoming: boolean
+  setNewReportIncoming: (reportIncoming: boolean) => void
 }
 
 const AppContext = createContext<AppContextType>({
@@ -18,6 +20,8 @@ const AppContext = createContext<AppContextType>({
   setCertainRoomIdReports: () => {},
   userData: {} as User,
   setUserData: () => {},
+  newReportIncoming: false,
+  setNewReportIncoming: () => {},
 })
 
 export default AppContext

@@ -3,19 +3,18 @@ import { Dialog, Listbox } from '@headlessui/react'
 import { useCookies } from 'react-cookie'
 import { useHistory } from 'react-router-dom'
 import useAddReport from '../../api/useAddReport'
-import { AddReport } from '../../types/AddReport'
 import Input from '../../components/Input'
 import { useGetRooms } from '../../api'
-import { Report, Room } from '../../types'
-
-interface Props {
-  selectRoom: string
-}
+import { Room } from '../../types'
+import AppContext from '../../AppContext'
 
 const reportTypes = [
   { id: 1, key: 'DEFEKT', label: 'Defekt' },
   { id: 2, key: 'FEHLEND', label: 'Fehlend' },
 ]
+
+const geräteTypen = [{ id: 1, key: '1', label: 'Tastatur' }]
+
 const meldungsStatus = [
   { id: 1, key: 'NEU', label: 'Neu' },
   {
@@ -28,17 +27,17 @@ const meldungsStatus = [
     key: 'IN_BEARBEITUNG_PC_WERKSTATT',
     label: 'In Bearbeitung PC Werkstatt',
   },
-  { id: 2, key: 'GESCHLOSSEN', label: 'Geschlossen' },
 ]
 
-export const ReportingForm: FC<Props> = ({ selectRoom }) => {
+export const ReportingForm: FC = () => {
+  const { selectedRoomId, setNewReportIncoming } = React.useContext(AppContext)
+
   const [openDialogForm, setOpenDialogForm] = useState(false)
   const [cookies] = useCookies(['access_token'])
   const history = useHistory()
   const AddReportForm = useAddReport()
   const [meldungsTyp, setMeldungsTyp] = useState<string>('')
-  const [meldungsName, setMeldungsName] = useState<string>('')
-  const [raumId, setraumId] = useState('')
+  const [raumId, setRaumId] = useState(selectedRoomId || '')
   const [geraeteTypId, setGeraeteTypId] = useState<string>('')
   const [description, setDescription] = useState<string>('')
   const [geraeteId, setGeraeteId] = useState<string>('')
@@ -50,33 +49,37 @@ export const ReportingForm: FC<Props> = ({ selectRoom }) => {
 
   const getRooms = useGetRooms()
 
-  getRooms({ accessToken: cookies.access_token }).then((res: Room[]) =>
-    setRooms(res)
-  )
+  useEffect(() => {
+    getRooms({ accessToken: cookies.access_token }).then((res: Room[]) =>
+      setRooms(res)
+    )
+  }, [])
 
-  const addReportForm = async (
-    accessToken: string,
-    meldungs_typ: string,
-    raum_id: string,
-    geraete_typ_id: string,
-    description: string,
-    geraete_id: string,
-    status: string
-  ): Promise<void> => {
+  const clearStates = (): void => {
+    setMeldungsTyp('')
+    setGeraeteId('')
+    setGeraeteTypId('')
+    setDescription('')
+    setStatus('')
+    setRaumId('')
+  }
+
+  const addReportForm = async (): Promise<void> => {
     try {
-      const addReportResponse: AddReport[] = await AddReportForm({
-        accessToken,
-        meldungs_typ,
-        raum_id,
-        geraete_typ_id,
-        description,
-        geraete_id,
+      const addReportResponse = await AddReportForm({
+        accessToken: cookies?.access_token,
+        meldungs_typ: meldungsTyp,
+        raum_id: raumId || selectedRoomId,
+        geraete_typ_id: geraeteTypId,
+        description: description,
+        geraete_id: geraeteId,
         status,
       })
 
       if (addReportResponse) {
-        // setOpenDialogForm(false)
-        history.push('/overview')
+        clearStates()
+        setOpenDialogForm(false)
+        setNewReportIncoming(true)
       }
     } catch (e) {
       if (e.response.status === 401) history.push('/')
@@ -116,7 +119,7 @@ export const ReportingForm: FC<Props> = ({ selectRoom }) => {
           <div className="h-full min-h-96">
             <Dialog.Panel className="w-full h-fit flex flex-col max-w-2xl bg-white rounded-2xl">
               <Dialog.Title className="flex justify-center items-center bg-primary text-white font-bold h-16 rounded-t-2xl">
-                Defekt für Raum {raumId} melden
+                Defekt für Raum {raumId || selectedRoomId} melden
               </Dialog.Title>
               {errorMessage.length > 0 ? (
                 <div className="px-5 py-3 text-red-700 bg-red-100">
@@ -127,22 +130,25 @@ export const ReportingForm: FC<Props> = ({ selectRoom }) => {
               <div className="flex flex-col gap-4 w-full h-fit bg-white px-4 py-12 md:px-32">
                 <Input
                   type="text"
-                  placeHolder="Name des Defekts"
-                  onChange={(value: string) => setMeldungsName(value)}
-                />
-                <Input
-                  type="text"
                   placeHolder="Geräte ID"
                   onChange={(value: string) => setGeraeteId(value)}
                 />
 
                 <div className="relative">
-                  <Listbox value={raumId} onChange={setraumId}>
+                  <Listbox
+                    value={geraeteTypId}
+                    onChange={(value) => {
+                      setGeraeteTypId(value)
+                    }}
+                  >
                     <Listbox.Button className="flex justify-between items-center text-left bg-backgroundGray px-5 py-2 rounded-2xl w-96 placeholder-neutral-600 text-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
                       <span>
-                        {raumId
-                          ? rooms.find((s) => s.id === raumId)
-                          : 'Raum auswählen'}
+                        {geraeteTypId
+                          ? geräteTypen.find(
+                              (geräteTyp) =>
+                                geräteTyp.id.toString() === geraeteTypId
+                            )?.label
+                          : 'Geräte Typ auswählen'}
                       </span>
                       <span className="">
                         <svg
@@ -161,10 +167,50 @@ export const ReportingForm: FC<Props> = ({ selectRoom }) => {
                         </svg>
                       </span>
                     </Listbox.Button>
-                    <Listbox.Options className="w-full absolute top-10 left-0 z-50 bg-white p-3 rounded-xl h-44 overflow-y-auto shadow flex flex-col gap-2 divide-y">
-                      {rooms.map((room) => (
+                    <Listbox.Options className="w-full absolute top-10 left-0 z-50 bg-white p-3 rounded-xl max-h-min overflow-y-auto shadow flex flex-col gap-2 divide-y">
+                      {geräteTypen.map((geräteTyp, index) => (
                         <Listbox.Option
-                          key={room.id}
+                          key={index}
+                          value={geräteTyp.key}
+                          className="cursor-pointer hover:bg-secondary px-2"
+                        >
+                          {geräteTyp.label}
+                        </Listbox.Option>
+                      ))}
+                    </Listbox.Options>
+                  </Listbox>
+                </div>
+
+                <div className="relative">
+                  <Listbox
+                    value={raumId}
+                    onChange={(value) => {
+                      setRaumId(value)
+                    }}
+                  >
+                    <Listbox.Button className="flex justify-between items-center text-left bg-backgroundGray px-5 py-2 rounded-2xl w-96 placeholder-neutral-600 text-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
+                      <span>{raumId ? raumId : 'Raum auswählen'}</span>
+                      <span className="">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          className="w-6 h-6"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+                          />
+                        </svg>
+                      </span>
+                    </Listbox.Button>
+                    <Listbox.Options className="w-full absolute top-10 left-0 z-50 bg-white p-3 rounded-xl h-44 overflow-y-auto shadow flex flex-col gap-2 divide-y">
+                      {rooms.map((room, index) => (
+                        <Listbox.Option
+                          key={index}
                           value={room.id}
                           className="cursor-pointer hover:bg-secondary px-2"
                         >
@@ -178,9 +224,7 @@ export const ReportingForm: FC<Props> = ({ selectRoom }) => {
                   <Listbox value={status} onChange={setStatus}>
                     <Listbox.Button className="flex justify-between items-center text-left bg-backgroundGray px-5 py-2 rounded-2xl w-96 placeholder-neutral-600 text-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
                       <span>
-                        {status
-                          ? meldungsStatus.find((s) => s.key === status).label
-                          : 'Meldungsstatus auswählen'}
+                        {status ? status : 'Meldungsstatus auswählen'}
                       </span>
                       <span className="">
                         <svg
@@ -216,9 +260,7 @@ export const ReportingForm: FC<Props> = ({ selectRoom }) => {
                   <Listbox value={meldungsTyp} onChange={setMeldungsTyp}>
                     <Listbox.Button className="flex justify-between items-center text-left bg-backgroundGray px-5 py-2 rounded-2xl w-96 placeholder-neutral-600 text-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
                       <span>
-                        {meldungsTyp
-                          ? reportTypes.find((s) => s.key === meldungsTyp).label
-                          : 'Meldungstype auswählen'}
+                        {meldungsTyp ? meldungsTyp : 'Meldungstype auswählen'}
                       </span>
                       <span className="">
                         <svg
@@ -260,23 +302,19 @@ export const ReportingForm: FC<Props> = ({ selectRoom }) => {
               <div className="flex justify-center items-center bg-primary h-16 w-full gap-4 rounded-b-2xl">
                 <button
                   className="w-32 rounded-2xl py-1 px-2 bg-gray-400 text-gray-700 hover:text-slate-200 hover:outline hover:outline-secondary hover:bg-primary"
-                  onClick={() => setOpenDialogForm(false)}
+                  onClick={() => {
+                    clearStates()
+                    setOpenDialogForm(false)
+                  }}
                 >
                   Abbrechen
                 </button>
                 <button
-                  className="w-32 rounded-2xl py-1 px-2 bg-secondary text-slate-200 hover:outline hover:outline-secondary hover:bg-primary"
-                  onClick={() =>
-                    addReportForm(
-                      cookies.access_token,
-                      meldungsTyp,
-                      raumId,
-                      geraeteTypId,
-                      description,
-                      geraeteId,
-                      status
-                    )
-                  }
+                  className="w-32 rounded-2xl py-1 px-2 bg-secondary text-slate-200 hover:outline disabled:bg-secondary disabled:outline-none hover:outline-secondary hover:bg-primary"
+                  disabled={!raumId || !geraeteId || !geraeteTypId || !status}
+                  onClick={() => {
+                    addReportForm()
+                  }}
                 >
                   Absenden
                 </button>

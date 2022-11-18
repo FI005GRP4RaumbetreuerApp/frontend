@@ -19,7 +19,7 @@ const useAddReports = (): (({
   description,
   geraete_id,
   status,
-}: useAddReportsProps) => Promise<AddReport[]>) => {
+}: useAddReportsProps) => Promise<boolean>) => {
   return async ({
     accessToken,
     meldungs_typ,
@@ -28,7 +28,7 @@ const useAddReports = (): (({
     description,
     geraete_id,
     status,
-  }: useAddReportsProps): Promise<AddReport[]> => {
+  }: useAddReportsProps): Promise<boolean> => {
     const bodyContent = {
       meldungs_typ,
       raum_id,
@@ -48,7 +48,7 @@ const useAddReports = (): (({
       }
     )
 
-    return useGetReportsResponse.data
+    return useGetReportsResponse.status === 200 ? true : false
   }
 }
 

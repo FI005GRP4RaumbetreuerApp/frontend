@@ -20,6 +20,7 @@ export const RoutingComponent: FC = () => {
   const [selectedRoomId, setSelectedRoomId] = useState<string>('')
   const [certainRoomIdReports, setCertainRoomIdReports] = useState<Report[]>([])
   const [userData, setUserData] = useState<User>()
+  const [newReportIncoming, setNewReportIncoming] = useState<boolean>(false)
 
   const checkForLoggedInStatus = (): void => {
     if (
@@ -54,6 +55,8 @@ export const RoutingComponent: FC = () => {
         setCertainRoomIdReports,
         userData,
         setUserData,
+        newReportIncoming,
+        setNewReportIncoming,
       }}
     >
       <Router>

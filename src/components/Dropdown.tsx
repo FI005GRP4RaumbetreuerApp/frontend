@@ -5,8 +5,12 @@ import AppContext from '../AppContext'
 import { Report, Room } from '../types'
 
 const App: React.FC = () => {
-  const { setCertainRoomIdReports, setSelectedRoomId, selectedRoomId } =
-    React.useContext(AppContext)
+  const {
+    setCertainRoomIdReports,
+    setSelectedRoomId,
+    selectedRoomId,
+    newReportIncoming,
+  } = React.useContext(AppContext)
 
   const [cookies] = useCookies(['access_token'])
 
@@ -29,14 +33,20 @@ const App: React.FC = () => {
     getRoomReports({
       id: key,
       accessToken: cookies.access_token,
-    }).then((reports: Report[]) => setCertainRoomIdReports(reports))
+    }).then((reports: Report[]) => setCertainRoomIdReports(reports.reverse()))
     setOpen(!open)
   }
 
+  React.useEffect(() => {
+    getRoomReports({
+      id: selectedRoomId,
+      accessToken: cookies.access_token,
+    }).then((reports: Report[]) => setCertainRoomIdReports(reports.reverse()))
+  }, [newReportIncoming])
   return (
     <div className="text-white">
       <button
-        className="bg-secondary w-24 h-12 rounded-3xl text-xl flex items-center justify-around"
+        className="bg-secondary px-4 w-24 h-12 rounded-3xl text-xl flex items-center justify-around"
         onClick={() => setOpen(!open)}
       >
         {selectedRoomId}
