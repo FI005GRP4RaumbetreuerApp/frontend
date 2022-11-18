@@ -13,6 +13,43 @@ import PageLayout from '../../layouts'
 import { Report, Room, User } from '../../types'
 import { ReportingForm } from './ReportingForm'
 
+const geraeteTypen = [
+  { id: 1, label: 'Tastatur' },
+  { id: 2, label: 'Maus' },
+  { id: 3, label: 'Kabel-Strom' },
+  { id: 4, label: 'Kabel-HDMI' },
+  { id: 5, label: 'Kabel-DVI' },
+  { id: 6, label: 'Kabel-DP' },
+  { id: 7, label: 'Kabel-LAN' },
+  { id: 8, label: 'Kabel-USB-C' },
+  { id: 9, label: 'Kabel-USB-A' },
+  { id: 10, label: 'Kabel-VGA' },
+  { id: 11, label: 'Fernbedinung' },
+  { id: 12, label: 'Switch' },
+  { id: 13, label: 'Laptop' },
+  { id: 14, label: 'Tablet' },
+  { id: 15, label: 'Handy' },
+  { id: 16, label: 'Monitor-18Zoll' },
+  { id: 17, label: 'Monitor-19Zoll' },
+  { id: 18, label: 'Monitor-20Zoll' },
+  { id: 19, label: 'Monitor-21Zoll' },
+  { id: 20, label: 'Monitor-22Zoll' },
+  { id: 21, label: 'Monitor-23Zoll' },
+  { id: 22, label: 'Monitor-24Zoll' },
+  { id: 23, label: 'Monitor-27Zoll' },
+  { id: 24, label: 'Monitor-28Zoll' },
+  { id: 25, label: 'Steckdosenleiste' },
+  { id: 26, label: 'Beamer' },
+  { id: 27, label: 'Kopfhörer' },
+  { id: 28, label: 'Lautsprecher' },
+  { id: 29, label: 'Router' },
+  { id: 30, label: 'PC-Desktop' },
+  { id: 31, label: 'PC-Tiny' },
+  { id: 32, label: 'PC-Serverrack' },
+  { id: 33, label: 'Stromdose' },
+  { id: 34, label: 'Lichtschalter' },
+]
+
 export const Landingpage: FC = () => {
   const [cookies] = useCookies(['access_token'])
 
@@ -42,7 +79,7 @@ export const Landingpage: FC = () => {
     {
       id: 2,
       key: 'IN_BEARBEITUNG_RAUMBETREUER',
-      label: 'In Beareitung Raumbetreuer',
+      label: 'In Bearbeitung Raumbetreuer',
     },
     {
       id: 2,
@@ -113,6 +150,16 @@ export const Landingpage: FC = () => {
                 {report.description || 'Keine Beschreibung verfügbar'}
               </div>
               <div className="justify-between w-4/5 flex flex-row ">
+                <div className="w-full">
+                  {
+                    geraeteTypen.find(
+                      (geraeteTyp) =>
+                        geraeteTyp.id.toString() ===
+                        report.geraete_typ.toString()
+                    )?.label
+                  }
+                </div>
+
                 <div className="w-full">{report.room}</div>
                 <div
                   className={`w-full text-center ${
@@ -145,6 +192,16 @@ export const Landingpage: FC = () => {
                     {report.description || 'Keine Beschreibung verfügbar'}
                   </div>
                   <div className="justify-between w-4/5 flex flex-row">
+                    <div className="w-full">
+                      {
+                        geraeteTypen.find(
+                          (geraeteTyp) =>
+                            geraeteTyp.id.toString() ===
+                            report.geraete_typ.toString()
+                        )?.label
+                      }
+                    </div>
+
                     <div className="w-full">{report.room}</div>
                     <div
                       className={`w-full text-center ${
@@ -169,7 +226,7 @@ export const Landingpage: FC = () => {
             )}
           </div>
         )}
-        {userData?.id === 1 && (
+        {raumBetreuerMeldungen.flat(2).length > 1 && (
           <div className="overflow-y-scroll my-4 min-h-fit max-h-128 pb-6 px-2 sm:px-8 w-full bg-white rounded-3xl">
             <div className="z-40 sticky top-0 bg-white font-bold py-8 px-2 sm:px-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
               <div className="w-full text-center">
@@ -182,6 +239,15 @@ export const Landingpage: FC = () => {
                   {report.description || 'Keine Beschreibung verfügbar'}
                 </div>
                 <div className="justify-between w-4/5 flex flex-row">
+                  <div className="w-full">
+                    {
+                      geraeteTypen.find(
+                        (geraeteTyp) =>
+                          geraeteTyp.id.toString() ===
+                          report.geraete_typ.toString()
+                      )?.label
+                    }
+                  </div>
                   <div className="w-full">{report.room}</div>
                   <div
                     className={`w-full text-center ${
@@ -212,6 +278,15 @@ export const Landingpage: FC = () => {
                   {report.description || 'Keine Beschreibung verfügbar'}
                 </div>
                 <div className="justify-between w-4/5 flex flex-row">
+                  <div className="w-full">
+                    {
+                      geraeteTypen.find(
+                        (geraeteTyp) =>
+                          geraeteTyp.id.toString() ===
+                          report.geraete_typ.toString()
+                      )?.label
+                    }
+                  </div>
                   <div className="w-full">{report.room}</div>
                   <div
                     className={`w-full text-center ${

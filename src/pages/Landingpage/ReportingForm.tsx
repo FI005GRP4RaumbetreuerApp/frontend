@@ -13,14 +13,49 @@ const reportTypes = [
   { id: 2, key: 'FEHLEND', label: 'Fehlend' },
 ]
 
-const geräteTypen = [{ id: 1, key: '1', label: 'Tastatur' }]
+const geräteTypen = [
+  { id: 1, label: 'Tastatur' },
+  { id: 2, label: 'Maus' },
+  { id: 3, label: 'Kabel-Strom' },
+  { id: 4, label: 'Kabel-HDMI' },
+  { id: 5, label: 'Kabel-DVI' },
+  { id: 6, label: 'Kabel-DP' },
+  { id: 7, label: 'Kabel-LAN' },
+  { id: 8, label: 'Kabel-USB-C' },
+  { id: 9, label: 'Kabel-USB-A' },
+  { id: 10, label: 'Kabel-VGA' },
+  { id: 11, label: 'Fernbedinung' },
+  { id: 12, label: 'Switch' },
+  { id: 13, label: 'Laptop' },
+  { id: 14, label: 'Tablet' },
+  { id: 15, label: 'Handy' },
+  { id: 16, label: 'Monitor-18Zoll' },
+  { id: 17, label: 'Monitor-19Zoll' },
+  { id: 18, label: 'Monitor-20Zoll' },
+  { id: 19, label: 'Monitor-21Zoll' },
+  { id: 20, label: 'Monitor-22Zoll' },
+  { id: 21, label: 'Monitor-23Zoll' },
+  { id: 22, label: 'Monitor-24Zoll' },
+  { id: 23, label: 'Monitor-27Zoll' },
+  { id: 24, label: 'Monitor-28Zoll' },
+  { id: 25, label: 'Steckdosenleiste' },
+  { id: 26, label: 'Beamer' },
+  { id: 27, label: 'Kopfhörer' },
+  { id: 28, label: 'Lautsprecher' },
+  { id: 29, label: 'Router' },
+  { id: 30, label: 'PC-Desktop' },
+  { id: 31, label: 'PC-Tiny' },
+  { id: 32, label: 'PC-Serverrack' },
+  { id: 33, label: 'Stromdose' },
+  { id: 34, label: 'Lichtschalter' },
+]
 
 const meldungsStatus = [
   { id: 1, key: 'NEU', label: 'Neu' },
   {
     id: 2,
     key: 'IN_BEARBEITUNG_RAUMBETREUER',
-    label: 'In Beareitung Raumbetreuer',
+    label: 'In Bearbeitung Raumbetreuer',
   },
   {
     id: 2,
@@ -134,7 +169,7 @@ export const ReportingForm: FC = () => {
                   onChange={(value: string) => setGeraeteId(value)}
                 />
 
-                <div className="relative">
+                <div className="relative ">
                   <Listbox
                     value={geraeteTypId}
                     onChange={(value) => {
@@ -167,11 +202,11 @@ export const ReportingForm: FC = () => {
                         </svg>
                       </span>
                     </Listbox.Button>
-                    <Listbox.Options className="w-full absolute top-10 left-0 z-50 bg-white p-3 rounded-xl max-h-min overflow-y-auto shadow flex flex-col gap-2 divide-y">
+                    <Listbox.Options className="w-full absolute top-10 h-44 overflow-y-auto left-0 z-50 bg-white p-3 rounded-xl max-h-min overflow-y-auto shadow flex flex-col gap-2 divide-y">
                       {geräteTypen.map((geräteTyp, index) => (
                         <Listbox.Option
                           key={index}
-                          value={geräteTyp.key}
+                          value={geräteTyp.id.toString()}
                           className="cursor-pointer hover:bg-secondary px-2"
                         >
                           {geräteTyp.label}
