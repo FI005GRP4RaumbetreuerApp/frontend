@@ -74,18 +74,23 @@ export const Landingpage: FC = () => {
   const getOwnRoom = useGetOwnRoom()
 
   React.useEffect(() => {
+    const allRaumBetreuerMeldungen = []
     if (raumBetreuerMeldungen.length === 0)
-      getOwnRoom({ accessToken: cookies.access_token }).then((rooms: Room[]) =>
-        rooms.forEach((room) =>
-          getRoomSupervisorReports({
-            id: room.id,
-            accessToken: cookies.access_token,
-          }).then((report: Report[]) => {
-            if (report.length > 0) {
-              setRaumBetreuerMeldungen([...raumBetreuerMeldungen, report])
-            }
-          })
-        )
+      getOwnRoom({ accessToken: cookies.access_token }).then(
+        (rooms: Room[]) => {
+          console.log('rooms', rooms)
+
+          rooms.forEach((room, index) =>
+            getRoomSupervisorReports({
+              id: room.id,
+              accessToken: cookies.access_token,
+            }).then((report: Report[]) => {
+              allRaumBetreuerMeldungen.push(report)
+              if (index === rooms.length)
+                setRaumBetreuerMeldungen(allRaumBetreuerMeldungen)
+            })
+          )
+        }
       )
   }, [])
 
