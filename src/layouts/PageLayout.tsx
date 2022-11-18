@@ -13,7 +13,7 @@ export const PageLayout: FC<PageLayoutProps> = ({
   return (
     <div className={`flex flex-col h-screen overflow-y-auto`}>
       <Header showHeaderButtons={showHeaderButtons} />
-      <div className="w-full flex flex-col bg-backgroundGray justify-center items-center">
+      <div className="w-full flex flex-col bg-backgroundGray justify-center items-center pb-20">
         {children}
       </div>
       <Footer />
