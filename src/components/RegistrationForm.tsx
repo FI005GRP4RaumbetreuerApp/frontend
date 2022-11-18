@@ -71,11 +71,7 @@ const RegistrationForm: FC<RegistrationProps> = ({
 
       <Input
         className={`w-4/5 ${emailIsInvalid ? '' : 'mt-6'}`}
-        errorMessage={
-          emailIsInvalid
-            ? 'Passwort Bestätigung stimmt mit dem Passwort überein'
-            : ''
-        }
+        errorMessage={emailIsInvalid ? 'Email hat das falsche Format' : ''}
         placeHolder="E-Mail"
         onChange={(value: string) => setEmail(value)}
       />
@@ -114,7 +110,10 @@ const RegistrationForm: FC<RegistrationProps> = ({
             emailIsInvalid
           }
           onClick={() => {
-            setEmailIsInvalid(!EmailValidator.validate(email))
+            setEmailIsInvalid(
+              !EmailValidator.validate(email) ||
+                !email.endsWith('@gso.schule.koeln')
+            )
 
             registerUser()
           }}
