@@ -2,8 +2,6 @@ import { FC } from 'react'
 import Dropdown from '../components/Dropdown'
 import { useCookies } from 'react-cookie'
 import { useHistory } from 'react-router-dom'
-import React from 'react'
-import AppContext from '../AppContext'
 
 interface HeaderProps {
   showHeaderButtons: boolean
@@ -12,8 +10,6 @@ interface HeaderProps {
 const Header: FC<HeaderProps> = ({ showHeaderButtons = false }) => {
   const [, , removeCookie] = useCookies(['access_token'])
   const history = useHistory()
-
-  const { userData } = React.useContext(AppContext)
 
   return (
     <div className="flex flex-row bg-primary justify-center">
@@ -24,7 +20,9 @@ const Header: FC<HeaderProps> = ({ showHeaderButtons = false }) => {
       )}
       {showHeaderButtons == true && (
         <div className="flex flex-row bg-primary m-6 w-full justify-around">
-          <span className="flex text-white text-4xl">Raumbetreuer App</span>
+          <span className="flex text-white text-4xl hidden md:block">
+            Raumbetreuer App
+          </span>
           <div className="flex gap-6">
             <Dropdown />
             <button
