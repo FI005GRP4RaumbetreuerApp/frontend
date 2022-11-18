@@ -44,7 +44,7 @@ const App: React.FC = () => {
     }).then((reports: Report[]) => setCertainRoomIdReports(reports.reverse()))
   }, [newReportIncoming])
   return (
-    <div className="text-white">
+    <div className="text-white relative">
       <button
         className="bg-secondary px-4 w-24 h-12 rounded-3xl text-xl flex items-center justify-around"
         onClick={() => setOpen(!open)}
