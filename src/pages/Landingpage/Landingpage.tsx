@@ -179,7 +179,7 @@ export const Landingpage: FC = () => {
           ))}
         </div>
         {selectedRoomId && (
-          <div className="overflow-y-scroll my-4 min-h-fit max-h-128 pb-6 px-2 sm:px-8 w-full bg-white rounded-3xl">
+          <div className="overflow-y-scroll my-4 h-96 pb-6 px-2 sm:px-8 w-full bg-white rounded-3xl">
             <div className="z-40 sticky top-0 bg-white font-bold p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
               <div className="w-full text-center">
                 {'Ausgewählter Raum: ' + selectedRoomId}
@@ -227,7 +227,7 @@ export const Landingpage: FC = () => {
           </div>
         )}
         {raumBetreuerMeldungen.flat(2).length > 0 && (
-          <div className="overflow-y-scroll my-4 min-h-fit max-h-128 pb-6 px-2 sm:px-8 w-full bg-white rounded-3xl">
+          <div className="overflow-y-scroll my-4 h-96 pb-6 px-2 sm:px-8 w-full bg-white rounded-3xl">
             <div className="z-40 sticky top-0 bg-white font-bold py-8 px-2 sm:px-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
               <div className="w-full text-center">
                 Meldungen für {userData?.vorname + ' ' + userData?.nachname}
@@ -268,7 +268,7 @@ export const Landingpage: FC = () => {
           </div>
         )}
         {userData?.role === 'PC_WERKSTATT' && (
-          <div className="overflow-y-scroll my-4 min-h-fit max-h-128 pb-6 px-2 sm:px-8 w-full bg-white rounded-3xl">
+          <div className="overflow-y-scroll my-4 h-96 pb-6 px-2 sm:px-8 w-full bg-white rounded-3xl">
             <div className="z-40 sticky top-0 bg-white font-bold py-8 px-2 sm:px-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
               <div className="w-full text-center">Alle Meldungen</div>
             </div>

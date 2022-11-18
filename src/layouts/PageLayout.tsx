@@ -11,7 +11,7 @@ export const PageLayout: FC<PageLayoutProps> = ({
   showHeaderButtons = false,
 }) => {
   return (
-    <div className={`flex flex-col  h-screen`}>
+    <div className={`flex flex-col min-h-full`}>
       <Header showHeaderButtons={showHeaderButtons} />
       <div className="w-full flex flex-col h-full bg-backgroundGray justify-center items-center pb-20">
         {children}
