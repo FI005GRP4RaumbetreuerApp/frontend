@@ -89,7 +89,7 @@ export const ReportingForm: FC = () => {
   }
 
   return (
-    <div className="flex py-5 items-start justify-start px-64 mr-auto">
+    <div className="flex py-5 items-start justify-start px-4 sm:px-16 md:px-24 lg:px-32 xl:px-64 mr-auto">
       <button
         type="button"
         onClick={() => setOpenDialogForm(true)}
