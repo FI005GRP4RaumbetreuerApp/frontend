@@ -47,7 +47,9 @@ const LoginForm: FC<LoginFormProps> = ({
 
   return (
     <div className="flex flex-col h-96 w-4/5 xs:w-96 bg-white rounded-3xl items-center">
-      <span className="text-gray-400 text-2xl mt-8">Login-Raumbetreuer</span>
+      <span className="text-gray-400 text-2xl mt-8">
+        Login Raumbetreuer-App
+      </span>
 
       <Input
         className={`w-4/5 ${

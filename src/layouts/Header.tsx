@@ -24,9 +24,7 @@ const Header: FC<HeaderProps> = ({ showHeaderButtons = false }) => {
       )}
       {showHeaderButtons == true && (
         <div className="flex flex-row bg-primary m-6 w-full justify-around">
-          <span className="flex text-white text-4xl">
-            {userData?.vorname + ' ' + userData?.nachname}
-          </span>
+          <span className="flex text-white text-4xl">Raumbetreuer App</span>
           <div className="flex gap-6">
             <Dropdown />
             <button
