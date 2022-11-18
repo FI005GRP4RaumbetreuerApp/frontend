@@ -84,7 +84,7 @@ const App: React.FC = () => {
         )}
       </button>
       {open ? (
-        <ul className="bg-secondary overflow-auto w-24 h-24 absolute rounded-xl">
+        <ul className="bg-secondary overflow-auto w-24 h-24 absolute rounded-xl z-50">
           {rooms.map((item: Room) => (
             <button
               onClick={() => handleRoomSelection(item.id)}
