@@ -40,7 +40,7 @@ const LoginForm: FC<LoginFormProps> = ({
         history.push('/overview')
       }
     } catch (e) {
-      if (e.response.status === 401) setCredentialsWrong(true)
+      if (e.response?.status === 401) setCredentialsWrong(true)
       console.log(e)
     }
   }
