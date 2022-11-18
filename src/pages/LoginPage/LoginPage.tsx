@@ -20,30 +20,32 @@ export const LoginPage: FC<LoginPageProps> = ({ setRedirectIsAllowed }) => {
 
   return (
     <PageLayout showHeaderButtons={false}>
-      {currentComponentIndex === 'PasswordResetInitiationForm' ? (
-        <PasswordResetInitiationForm
-          setCurrentComponentIndex={setCurrentComponentIndex}
-        />
-      ) : currentComponentIndex === 'PasswordResetForm' ? (
-        <PasswordResetForm
-          setCurrentComponentIndex={setCurrentComponentIndex}
-        />
-      ) : currentComponentIndex === 'ResetSuccessfullDialog' ? (
-        <PasswordResetSuccessfullDialog
-          setCurrentComponentIndex={setCurrentComponentIndex}
-        />
-      ) : currentComponentIndex === 'RegistrationForm' ? (
-        <RegistrationForm setCurrentComponentIndex={setCurrentComponentIndex} />
-      ) : currentComponentIndex === 'RegistrationSuccessfull' ? (
-        <RegistationSuccessfullDialog
-          setCurrentComponentIndex={setCurrentComponentIndex}
-        />
-      ) : (
-        <LoginForm
-          setCurrentComponentIndex={setCurrentComponentIndex}
-          setRedirectIsAllowed={setRedirectIsAllowed}
-        />
-      )}
+     <div className="h-screen flex items-center">
+       {currentComponentIndex === 'PasswordResetInitiationForm' ? (
+         <PasswordResetInitiationForm
+           setCurrentComponentIndex={setCurrentComponentIndex}
+         />
+       ) : currentComponentIndex === 'PasswordResetForm' ? (
+         <PasswordResetForm
+           setCurrentComponentIndex={setCurrentComponentIndex}
+         />
+       ) : currentComponentIndex === 'ResetSuccessfullDialog' ? (
+         <PasswordResetSuccessfullDialog
+           setCurrentComponentIndex={setCurrentComponentIndex}
+         />
+       ) : currentComponentIndex === 'RegistrationForm' ? (
+         <RegistrationForm setCurrentComponentIndex={setCurrentComponentIndex} />
+       ) : currentComponentIndex === 'RegistrationSuccessfull' ? (
+         <RegistationSuccessfullDialog
+           setCurrentComponentIndex={setCurrentComponentIndex}
+         />
+       ) : (
+         <LoginForm
+           setCurrentComponentIndex={setCurrentComponentIndex}
+           setRedirectIsAllowed={setRedirectIsAllowed}
+         />
+       )}
+     </div>
     </PageLayout>
   )
 }
