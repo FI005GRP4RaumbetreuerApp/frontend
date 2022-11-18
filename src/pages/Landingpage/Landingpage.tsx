@@ -78,15 +78,13 @@ export const Landingpage: FC = () => {
     if (raumBetreuerMeldungen.length === 0)
       getOwnRoom({ accessToken: cookies.access_token }).then(
         (rooms: Room[]) => {
-          console.log('rooms', rooms)
-
           rooms.forEach((room, index) =>
             getRoomSupervisorReports({
               id: room.id,
               accessToken: cookies.access_token,
             }).then((report: Report[]) => {
               allRaumBetreuerMeldungen.push(report)
-              if (index === rooms.length)
+              if (index === rooms.length - 1)
                 setRaumBetreuerMeldungen(allRaumBetreuerMeldungen)
             })
           )
