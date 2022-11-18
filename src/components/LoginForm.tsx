@@ -94,7 +94,7 @@ const LoginForm: FC<LoginFormProps> = ({
               setCurrentComponentIndex('PasswordResetInitiationForm')
             }
           >
-            Passwort Zurücksetzen
+            Passwort zurücksetzen
           </button>
           <button
             className="cursor-pointer text-gray-500 hover:text-primary"

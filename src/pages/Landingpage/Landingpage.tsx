@@ -74,18 +74,21 @@ export const Landingpage: FC = () => {
   const getOwnRoom = useGetOwnRoom()
 
   React.useEffect(() => {
+    const allRaumBetreuerMeldungen = []
     if (raumBetreuerMeldungen.length === 0)
-      getOwnRoom({ accessToken: cookies.access_token }).then((rooms: Room[]) =>
-        rooms.forEach((room) =>
-          getRoomSupervisorReports({
-            id: room.id,
-            accessToken: cookies.access_token,
-          }).then((report: Report[]) => {
-            if (report.length > 0) {
-              setRaumBetreuerMeldungen([...raumBetreuerMeldungen, report])
-            }
-          })
-        )
+      getOwnRoom({ accessToken: cookies.access_token }).then(
+        (rooms: Room[]) => {
+          rooms.forEach((room, index) =>
+            getRoomSupervisorReports({
+              id: room.id,
+              accessToken: cookies.access_token,
+            }).then((report: Report[]) => {
+              allRaumBetreuerMeldungen.push(report)
+              if (index === rooms.length - 1)
+                setRaumBetreuerMeldungen(allRaumBetreuerMeldungen)
+            })
+          )
+        }
       )
   }, [])
 
@@ -101,11 +104,11 @@ export const Landingpage: FC = () => {
       <ReportingForm />
       <div className="gap-4 flex flex-col max-w-sm sm:max-w-full w-full px-4 sm:px-16 md:px-24 lg:px-32 xl:px-64 h-full bg-backgroundGray justify-center items-center">
         <div className="overflow-y-scroll my-4 min-h-fit max-h-128 pb-6 px-2 sm:px-8 mx-32 w-full bg-white rounded-3xl">
-          <div className="font-bold p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
+          <div className="z-40 sticky top-0 bg-white font-bold p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
             <div className="w-full text-center">Eigene Meldungen</div>
           </div>
           {eigeneMeldungen.map((report) => (
-            <div className="hover:bg-gray-300 py-8 px-2 sm:px-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
+            <div className="z-20 hover:bg-gray-300 py-8 px-2 sm:px-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
               <div className={'w-full break-all'}>
                 {report.description || 'Keine Beschreibung verfügbar'}
               </div>
@@ -130,14 +133,14 @@ export const Landingpage: FC = () => {
         </div>
         {selectedRoomId && (
           <div className="overflow-y-scroll my-4 min-h-fit max-h-128 pb-6 px-8 w-full bg-white rounded-3xl">
-            <div className="font-bold p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
+            <div className="z-40 sticky top-0 bg-white font-bold p-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
               <div className="w-full text-center">
                 {'Ausgewählter Raum: ' + selectedRoomId}
               </div>
             </div>
             {certainRoomIdReports.length > 0 ? (
               certainRoomIdReports.map((report) => (
-                <div className="hover:bg-gray-300 py-8 px-2 sm:px-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
+                <div className="z-20 hover:bg-gray-300 py-8 px-2 sm:px-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
                   <div className="w-full break-all">
                     {report.description || 'Keine Beschreibung verfügbar'}
                   </div>
@@ -168,13 +171,13 @@ export const Landingpage: FC = () => {
         )}
         {userData?.role !== 'RAUMBETREUER' && (
           <div className="overflow-y-scroll my-4 min-h-fit max-h-128 pb-6 px-8 w-full bg-white rounded-3xl">
-            <div className="font-bold py-8 px-2 sm:px-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
+            <div className="z-40 sticky top-0 bg-white font-bold py-8 px-2 sm:px-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
               <div className="w-full text-center">
                 Meldungen für {userData?.vorname + ' ' + userData?.nachname}
               </div>
             </div>
             {raumBetreuerMeldungen.flat(2).map((report) => (
-              <div className="hover:bg-gray-300 p-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
+              <div className="z-20 hover:bg-gray-300 p-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
                 <div className="w-full break-all">
                   {report.description || 'Keine Beschreibung verfügbar'}
                 </div>
@@ -200,11 +203,11 @@ export const Landingpage: FC = () => {
         )}
         {userData?.role === 'PC_WERKSTATT' && (
           <div className="overflow-y-scroll my-4 min-h-fit max-h-128 pb-6 px-8 w-full bg-white rounded-3xl">
-            <div className="font-bold py-8 px-2 sm:px-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
+            <div className="z-40 sticky top-0 bg-white font-bold py-8 px-2 sm:px-8 gap-2 flex flex-row text-3xl text-stone-500 rounded-xl">
               <div className="w-full text-center">Alle Meldungen</div>
             </div>
             {raumAlleMeldungen.map((report) => (
-              <div className="hover:bg-gray-300 p-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
+              <div className="z-20 hover:bg-gray-300 p-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
                 <div className="w-full break-all">
                   {report.description || 'Keine Beschreibung verfügbar'}
                 </div>
