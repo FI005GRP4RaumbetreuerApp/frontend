@@ -106,7 +106,7 @@ export const Landingpage: FC = () => {
           </div>
           {eigeneMeldungen.map((report) => (
             <div className="hover:bg-gray-300 py-8 px-2 sm:px-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
-              <div className={'w-full break-all	'}>
+              <div className={'w-full break-all'}>
                 {report.description || 'Keine Beschreibung verfügbar'}
               </div>
               <div className="justify-between w-4/5 flex flex-row ">
@@ -138,7 +138,7 @@ export const Landingpage: FC = () => {
             {certainRoomIdReports.length > 0 ? (
               certainRoomIdReports.map((report) => (
                 <div className="hover:bg-gray-300 py-8 px-2 sm:px-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
-                  <div className="w-full">
+                  <div className="w-full break-all">
                     {report.description || 'Keine Beschreibung verfügbar'}
                   </div>
                   <div className="justify-between w-4/5 flex flex-row">
@@ -175,7 +175,7 @@ export const Landingpage: FC = () => {
             </div>
             {raumBetreuerMeldungen.flat(2).map((report) => (
               <div className="hover:bg-gray-300 p-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
-                <div className="w-full">
+                <div className="w-full break-all">
                   {report.description || 'Keine Beschreibung verfügbar'}
                 </div>
                 <div className="justify-between w-4/5 flex flex-row">
@@ -205,7 +205,7 @@ export const Landingpage: FC = () => {
             </div>
             {raumAlleMeldungen.map((report) => (
               <div className="hover:bg-gray-300 p-8 gap-2 flex flex-row text-sm text-stone-500 rounded-xl">
-                <div className="w-full">
+                <div className="w-full break-all">
                   {report.description || 'Keine Beschreibung verfügbar'}
                 </div>
                 <div className="justify-between w-4/5 flex flex-row">
