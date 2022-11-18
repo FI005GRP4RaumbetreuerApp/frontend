@@ -26,7 +26,7 @@ const Input: FC<InputProps> = ({
         {errorMessage}
       </span>
       <input
-        className="w-full h-12 bg-backgroundGray rounded-xl text-gray-500 px-4"
+        className="w-full h-12 bg-backgroundGray rounded-xl text-gray-500 px-4 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
         type={type}
         maxLength={maxLength || 100}
         placeholder={placeHolder}

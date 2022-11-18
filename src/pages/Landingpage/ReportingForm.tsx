@@ -141,14 +141,14 @@ export const ReportingForm: FC = () => {
                       setGeraeteTypId(value)
                     }}
                   >
-                    <Listbox.Button className="flex justify-between items-center text-left bg-backgroundGray px-5 py-2 rounded-2xl w-96 placeholder-neutral-600 text-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
+                    <Listbox.Button className="flex justify-between items-center text-left bg-backgroundGray px-5 py-3 rounded-2xl w-96 placeholder-neutral-600 text-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
                       <span>
                         {geraeteTypId
                           ? geräteTypen.find(
                               (geräteTyp) =>
                                 geräteTyp.id.toString() === geraeteTypId
                             )?.label
-                          : 'Geräte Typ auswählen'}
+                          : 'Gerät Typ auswählen'}
                       </span>
                       <span className="">
                         <svg
@@ -188,7 +188,7 @@ export const ReportingForm: FC = () => {
                       setRaumId(value)
                     }}
                   >
-                    <Listbox.Button className="flex justify-between items-center text-left bg-backgroundGray px-5 py-2 rounded-2xl w-96 placeholder-neutral-600 text-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
+                    <Listbox.Button className="flex justify-between items-center text-left bg-backgroundGray px-5 py-3 rounded-2xl w-96 placeholder-neutral-600 text-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
                       <span>{raumId ? raumId : 'Raum auswählen'}</span>
                       <span className="">
                         <svg
@@ -222,7 +222,7 @@ export const ReportingForm: FC = () => {
                 </div>
                 <div className="relative">
                   <Listbox value={status} onChange={setStatus}>
-                    <Listbox.Button className="flex justify-between items-center text-left bg-backgroundGray px-5 py-2 rounded-2xl w-96 placeholder-neutral-600 text-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
+                    <Listbox.Button className="flex justify-between items-center text-left bg-backgroundGray px-5 py-3 rounded-2xl w-96 placeholder-neutral-600 text-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
                       <span>
                         {status ? status : 'Meldungsstatus auswählen'}
                       </span>
@@ -258,9 +258,9 @@ export const ReportingForm: FC = () => {
                 </div>
                 <div className="relative">
                   <Listbox value={meldungsTyp} onChange={setMeldungsTyp}>
-                    <Listbox.Button className="flex justify-between items-center text-left bg-backgroundGray px-5 py-2 rounded-2xl w-96 placeholder-neutral-600 text-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
+                    <Listbox.Button className="flex justify-between items-center text-left bg-backgroundGray px-5 py-3 rounded-2xl w-96 placeholder-neutral-600 text-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
                       <span>
-                        {meldungsTyp ? meldungsTyp : 'Meldungstype auswählen'}
+                        {meldungsTyp ? meldungsTyp : 'Meldungstyp auswählen'}
                       </span>
                       <span className="">
                         <svg
