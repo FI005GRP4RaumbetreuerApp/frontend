@@ -16,7 +16,7 @@ const useLogin = (): (({
       password,
     }
     const useLoginResponse = await axios.post(
-      'http://144.76.118.243:8080/api/v1/auth/login',
+      'http://localhost:8080/api/v1/auth/login',
       requestBody,
       {
         headers: {

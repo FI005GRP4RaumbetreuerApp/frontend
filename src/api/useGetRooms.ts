@@ -10,7 +10,7 @@ const useGetRooms = (): (({
 }: useGetRoomsProps) => Promise<Room[]>) => {
   return async ({ accessToken }: useGetRoomsProps): Promise<Room[]> => {
     const useGetRoomResponse = await axios.get(
-      'http://144.76.118.243:8080/api/v1/raum/get/all',
+      'http://localhost:8080/api/v1/raum/get/all',
       {
         headers: {
           Authorization: 'Bearer ' + accessToken,

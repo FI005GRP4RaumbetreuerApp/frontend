@@ -12,7 +12,7 @@ const useGetSelfMadeReports = (): (({
     accessToken,
   }: useGetSelfMadeReportsProps): Promise<Report[]> => {
     const useGetSelfMadeReportsResponse = await axios.get(
-      'http://144.76.118.243:8080/api/v1/meldungen/get/own',
+      'http://localhost:8080/api/v1/meldungen/get/own',
       {
         headers: {
           Authorization: 'Bearer ' + accessToken,

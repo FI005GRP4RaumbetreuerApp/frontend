@@ -22,7 +22,7 @@ const usePasswordReset = (): (({
       reset_code: authenticationCode,
     }
     const passwordResetResponse = await axios.post(
-      'http://144.76.118.243:8080/api/v1/auth/resetpassword',
+      'http://localhost:8080/api/v1/auth/resetpassword',
       requestBody
     )
 

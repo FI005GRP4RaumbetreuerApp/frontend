@@ -18,7 +18,7 @@ const useRefreshToken = (): (({
       refreshToken,
     }
     const useRefreshResponse = await axios.post(
-      '144.76.118.243:8080/api/v1/auth/refresh',
+      'localhost:8080/api/v1/auth/refresh',
       requestBody
     )
 
